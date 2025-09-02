@@ -1,7 +1,6 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
-import { Trade } from "@prisma/client";
 
-import { TradeDto, UpdateTradeDto } from "./repository/dto";
+import { TradeDto } from "./repository/dto";
 import { TradeRepository } from "./repository/trade.repository";
 import { PortfolioService } from "../portfolio/portfolio.service";
 import { ServiceErrorException } from "src/exceptions/service-error.exception";
@@ -76,6 +75,11 @@ export class TradeService {
       };
     } catch (error) {
       console.error(error);
+
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+
       throw new ServiceErrorException(
         `Error fetching trades for portfolio ${portfolioId}`,
       );
@@ -171,6 +175,11 @@ export class TradeService {
       };
     } catch (error) {
       console.error(error);
+
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+
       throw new ServiceErrorException(
         `Error deleting all trades for portfolio ${portfolioId}`,
       );
