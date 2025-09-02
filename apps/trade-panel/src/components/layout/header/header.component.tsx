@@ -1,5 +1,6 @@
 "use client";
 
+import { useMobileDevice } from "@/src/hooks/mobile-device.hook";
 import { Button } from "@workspace/ui/components/button";
 import {
 	DropdownMenu,
@@ -13,20 +14,18 @@ import {
 } from "@workspace/ui/components/dropdown-menu";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
 import { IoIosArrowDown } from "react-icons/io";
+
+import { HeaderMobile } from "./header-mobile.component";
 
 export function Header() {
 	const { theme, setTheme } = useTheme();
-	const [mounted, setMounted] = useState(false);
+	const { isMobile } = useMobileDevice();
 
-	useEffect(() => {
-		setMounted(true);
-	}, []);
-
-	if (!mounted) {
-		return null;
+	if (isMobile) {
+		return <HeaderMobile />;
 	}
+
 	return (
 		<header className="flex items-center justify-center px-4 h-[98px] bg-background-secondary border-b-1 border-b-border-secondary">
 			<div className="flex justify-between max-w-[1600px] w-full h-full">
