@@ -5,7 +5,8 @@ export const portfolioFormSchema = z.object({
   name: z
     .string()
     .min(3, "Name must have at least 3 characters")
-    .max(50, "Name must have at most 50 characters"),
+    .max(50, "Name must have at most 50 characters")
+    .transform((val) => val.toUpperCase()),
   initialValue: z
     .string()
     .min(1, "Initial value is required")
