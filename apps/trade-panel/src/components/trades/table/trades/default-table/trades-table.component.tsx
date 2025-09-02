@@ -8,9 +8,9 @@ import { useTradesGrid } from "./hooks/trades-grid.hook";
 
 import "../trades-table.style.css";
 
-export function TradeTable() {
-	const { colDefs, gridRef, rowData } = useTradesGrid();
+export function TradesTable() {
 	const { theme } = useTheme();
+	const { colDefs, gridRef, rowData } = useTradesGrid();
 
 	return (
 		<div
@@ -25,7 +25,7 @@ export function TradeTable() {
 				ref={gridRef}
 				columnDefs={colDefs}
 				rowData={rowData}
-				className="!h-[548px] mt-8"
+				className="!h-[595px] mt-8"
 				rowHeight={55}
 				pagination={true}
 				paginationPageSize={20}

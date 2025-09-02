@@ -19,3 +19,7 @@ export interface INavSection {
 export interface INavSectionListProps {
 	navSections: INavSection[];
 }
+
+export interface IFooterSocialLinksProps {
+	socialLinks: ISocialLink[];
+}
