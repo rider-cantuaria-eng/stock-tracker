@@ -1,5 +1,5 @@
 import "@workspace/ui/globals.css";
-import { Header } from "@/src/components/header/header.component";
+import { Header } from "@/src/components/layout/header.component";
 import { ThemeProvider } from "@/src/core/context/theme.provider";
 import type { Metadata } from "next";
 import { Golos_Text } from "next/font/google";
