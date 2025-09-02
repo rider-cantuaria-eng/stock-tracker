@@ -1,7 +1,7 @@
 import { FiPlus, FiMinus } from "react-icons/fi";
 import { IoIosTrendingUp, IoIosTrendingDown } from "react-icons/io";
 
-import { ITrade } from "../hooks/trades-grid.hook";
+import { ITrade } from "../default-table/hooks/trades-grid.hook";
 
 export interface IProfitOrLossRendererProps {
 	data: ITrade;
