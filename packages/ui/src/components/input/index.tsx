@@ -4,7 +4,7 @@ import { Label } from "../label";
 
 function Input({ className, label, htmlFor, type, ...props }: InputProps) {
   return (
-    <div>
+    <div className="w-full">
       {label && (
         <Label htmlFor={htmlFor} className="mb-2">
           {label}

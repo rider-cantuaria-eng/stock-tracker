@@ -6,6 +6,13 @@
 @import "tw-animate-css";
 @import "./theme/base-colors.css";
 
+
+@theme {
+  --breakpoint-lg: 1200px;
+  --breakpoint-2xl: 1669px;
+
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
