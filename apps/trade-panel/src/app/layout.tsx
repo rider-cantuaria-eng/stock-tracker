@@ -1,6 +1,7 @@
 import "@workspace/ui/globals.css";
 import { Header } from "@/src/components/layout/header/header.component";
 import { ThemeProvider } from "@/src/core/context/theme.provider";
+import { QueryClientProviderWrapper } from "@/src/providers/query-client.provider";
 import { Metadata } from "next";
 import { Golos_Text } from "next/font/google";
 
@@ -25,15 +26,17 @@ export default function RootLayout({
 	return (
 		<html lang="pt-BR" suppressHydrationWarning>
 			<body className={`${golosTextFonts.variable} antialiased`}>
-				<ThemeProvider>
-					<div className="flex flex-col h-full min-h-dvh">
-						<div className="flex flex-col grow">
-							{<Header />}
-							<div className="flex justify-center items-center ">{children}</div>
-							<Footer />
+				<QueryClientProviderWrapper>
+					<ThemeProvider>
+						<div className="flex flex-col h-full min-h-dvh">
+							<div className="flex flex-col grow">
+								{<Header />}
+								<div className="flex justify-center items-center ">{children}</div>
+								<Footer />
+							</div>
 						</div>
-					</div>
-				</ThemeProvider>
+					</ThemeProvider>
+				</QueryClientProviderWrapper>
 			</body>
 		</html>
 	);
