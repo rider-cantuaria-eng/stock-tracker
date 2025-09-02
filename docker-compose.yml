@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: trading-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: trading_db
+      POSTGRES_USER: trading_user
+      POSTGRES_PASSWORD: trading_password
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+      - ./apps/trade-api/prisma/migrations:/docker-entrypoint-initdb.d
+    networks:
+      - trading-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U trading_user -d trading_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # pgAdmin (opcional - para interface gráfica do PostgreSQL)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: trading-pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@trading.local
+      PGADMIN_DEFAULT_PASSWORD: admin123
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - "8080:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    networks:
+      - trading-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+    driver: local
+  pgadmin_data:
+    driver: local
+
+networks:
+  trading-network:
+    driver: bridge

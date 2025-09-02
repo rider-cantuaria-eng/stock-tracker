@@ -9,7 +9,11 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "db:generate": "pnpm --filter trade-api exec prisma generate",
     "db:migrate": "pnpm --filter trade-api exec prisma migrate dev",
-    "db:studio": "pnpm --filter trade-api exec prisma studio"
+    "db:studio": "pnpm --filter trade-api exec prisma studio",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f",
+    "docker:reset": "docker compose down -v && docker compose up -d"
   },
   "devDependencies": {
     "@workspace/eslint-config": "workspace:*",
