@@ -13,6 +13,7 @@
 		"@workspace/ui": "workspace:*",
 		"ag-grid-community": "^34.1.2",
 		"ag-grid-react": "^34.1.2",
+		"echarts": "^6.0.0",
 		"eslint": "^9.34.0",
 		"lucide-react": "^0.475.0",
 		"next": "^15.4.5",

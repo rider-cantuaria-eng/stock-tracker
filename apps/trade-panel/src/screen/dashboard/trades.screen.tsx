@@ -1,4 +1,5 @@
 import { PortfolioSummary } from "@/src/components/portfolio/portfolio-summary.component";
+import { TradesChart } from "@/src/components/trades/chart/trades-chart.component";
 import { TradeTable } from "@/src/components/trades/table/trades-table.component";
 import React from "react";
 
@@ -10,7 +11,9 @@ export function TradesScreen() {
 				<TradeTable />
 			</div>
 
-			<div className="w-[450px]"></div>
+			<div className="w-[450px]">
+				<TradesChart />
+			</div>
 		</div>
 	);
 }
