@@ -5,6 +5,8 @@ import { IoMdTime } from "react-icons/io";
 import { IoWalletOutline } from "react-icons/io5";
 import { RiEdit2Line } from "react-icons/ri";
 
+import { ModalCreatePortoflio } from "../modal/create-portfolio.modal";
+
 export function PortfolioSummary() {
 	return (
 		<section className="!w-full h-fit bg-background-secondary rounded-md p-7 mb-[1.5rem]">
@@ -18,6 +20,7 @@ export function PortfolioSummary() {
 						<RiEdit2Line />
 						Edit
 					</Button>
+					<ModalCreatePortoflio />
 				</div>
 			</div>
 
