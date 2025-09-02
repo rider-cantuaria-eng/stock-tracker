@@ -2,7 +2,7 @@ import { Badge } from "@workspace/ui/components/badge";
 import { useTheme } from "next-themes";
 import NextImage from "next/image";
 
-import { ITrade } from "../hooks/trades-grid.hook";
+import { ITrade } from "../default-table/hooks/trades-grid.hook";
 
 export interface IPairHoldingProps {
 	data: ITrade;

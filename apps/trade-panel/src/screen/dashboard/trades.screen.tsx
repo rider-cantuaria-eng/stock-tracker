@@ -1,6 +1,7 @@
 import { PortfolioSummary } from "@/src/components/portfolio/portfolio-summary.component";
 import { TradesChart } from "@/src/components/trades/chart/trades-chart.component";
-import { TradeTable } from "@/src/components/trades/table/trades-table.component";
+import { RecentsTrades } from "@/src/components/trades/recents-trades/recent-trades.component";
+import { TradeTable } from "@/src/components/trades/table/trades/default-table/trades-table.component";
 import React from "react";
 
 export function TradesScreen() {
@@ -13,6 +14,7 @@ export function TradesScreen() {
 
 			<div className="w-[450px]">
 				<TradesChart />
+				<RecentsTrades />
 			</div>
 		</div>
 	);

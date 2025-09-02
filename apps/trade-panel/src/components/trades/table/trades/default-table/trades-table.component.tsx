@@ -6,7 +6,7 @@ import { useTheme } from "next-themes";
 import { ModalCreateTrade } from "./create-modal.component";
 import { useTradesGrid } from "./hooks/trades-grid.hook";
 
-import "./trades-table.style.css";
+import "../trades-table.style.css";
 
 export function TradeTable() {
 	const { colDefs, gridRef, rowData } = useTradesGrid();

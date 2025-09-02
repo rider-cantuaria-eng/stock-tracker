@@ -7,7 +7,7 @@ import { useMemo, useRef, useState } from "react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 
-import { DateCell, PairHoldingCell, PnLCell, PriceCell } from "../cell-render";
+import { DateCell, PairHoldingCell, PnLCell, PriceCell } from "../../cell-render";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
