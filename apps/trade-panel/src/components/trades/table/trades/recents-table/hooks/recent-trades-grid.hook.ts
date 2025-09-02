@@ -6,8 +6,8 @@ import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import { useMemo, useRef, useState } from "react";
 
-import { ITrade } from "../../../hooks/trades-grid.hook";
 import { PairHoldingCell, PnLCell } from "../../cell-render";
+import { ITrade } from "../../hooks/trades-grid.hook";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 

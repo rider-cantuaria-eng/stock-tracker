@@ -1,10 +1,6 @@
-import { ISocialLink } from "./footer.types";
+import { IFooterSocialLinksProps } from "./footer.types";
 
-export interface IFooterRedirectLinksProps {
-	socialLinks: ISocialLink[];
-}
-
-export function FooterRedirectLinks({ socialLinks }: IFooterRedirectLinksProps) {
+export function FooterSocialLinks({ socialLinks }: IFooterSocialLinksProps) {
 	return (
 		<div className="flex justify-between items-center border-t-1 border-t-border-secondary pt-8 pb-4">
 			<div className="flex items-center">

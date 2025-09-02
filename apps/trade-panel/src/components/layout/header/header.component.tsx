@@ -13,13 +13,22 @@ import {
 } from "@workspace/ui/components/dropdown-menu";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 import { IoIosArrowDown } from "react-icons/io";
 
 export function Header() {
-	const { setTheme } = useTheme();
+	const { theme, setTheme } = useTheme();
+	const [mounted, setMounted] = useState(false);
 
+	useEffect(() => {
+		setMounted(true);
+	}, []);
+
+	if (!mounted) {
+		return null;
+	}
 	return (
-		<header className="flex items-center justify-center h-[98px] bg-background-secondary border-b-1 border-b-border-secondary">
+		<header className="flex items-center justify-center px-4 h-[98px] bg-background-secondary border-b-1 border-b-border-secondary">
 			<div className="flex justify-between max-w-[1600px] w-full h-full">
 				<nav className="flex items-center gap-4 h">
 					<span className="flex items-center text-foreground-secondary">LOGO</span>
@@ -41,64 +50,47 @@ export function Header() {
 				</nav>
 
 				<div className="flex items-center">
-					<div>
-						<DropdownMenu>
-							<DropdownMenuTrigger asChild>
-								<Button variant="ghost" className="darK:text-white font-medium text-md">
-									Total value in 2.10983 BTC
-									<IoIosArrowDown />
-								</Button>
-							</DropdownMenuTrigger>
-							<DropdownMenuContent className="w-56" align="start">
-								<DropdownMenuLabel>My Portifolios</DropdownMenuLabel>
-								<DropdownMenuGroup>
-									<DropdownMenuItem>
-										kucoin
-										<DropdownMenuShortcut>2.10983 BTC</DropdownMenuShortcut>
-									</DropdownMenuItem>
-									<DropdownMenuItem>
-										bybit
-										<DropdownMenuShortcut>2.10983 BTC</DropdownMenuShortcut>
-									</DropdownMenuItem>
-								</DropdownMenuGroup>
-								<DropdownMenuSeparator />
+					<DropdownMenu>
+						<DropdownMenuTrigger asChild>
+							<Button variant="ghost" className="darK:text-white font-medium text-md">
+								Total value in 2.10983 BTC
+								<IoIosArrowDown />
+							</Button>
+						</DropdownMenuTrigger>
+						<DropdownMenuContent className="w-56" align="start">
+							<DropdownMenuLabel>My Portifolios</DropdownMenuLabel>
+							<DropdownMenuGroup>
 								<DropdownMenuItem>
-									Log out
-									<DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+									kucoin
+									<DropdownMenuShortcut>2.10983 BTC</DropdownMenuShortcut>
 								</DropdownMenuItem>
-							</DropdownMenuContent>
-						</DropdownMenu>
+								<DropdownMenuItem>
+									bybit
+									<DropdownMenuShortcut>2.10983 BTC</DropdownMenuShortcut>
+								</DropdownMenuItem>
+							</DropdownMenuGroup>
+							<DropdownMenuSeparator />
+							<DropdownMenuItem>
+								Log out
+								<DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+							</DropdownMenuItem>
+						</DropdownMenuContent>
+					</DropdownMenu>
 
-						<DropdownMenu>
-							<DropdownMenuTrigger asChild>
-								<Button variant="outline" size="icon">
-									<Sun className="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
-									<Moon className="absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
-									<span className="sr-only">Toggle theme</span>
-								</Button>
-							</DropdownMenuTrigger>
-							<DropdownMenuContent align="end">
-								<DropdownMenuItem>
-									<Button
-										onClick={() => setTheme("light")}
-										className="w-full flex justify-start"
-										variant="ghost"
-									>
-										Light
-									</Button>
-								</DropdownMenuItem>
-								<DropdownMenuItem>
-									<Button
-										onClick={() => setTheme("dark")}
-										className="w-full flex justify-start"
-										variant="ghost"
-									>
-										Dark
-									</Button>
-								</DropdownMenuItem>
-							</DropdownMenuContent>
-						</DropdownMenu>
-					</div>
+					<Button
+						variant="outline"
+						onClick={() => {
+							if (theme === "dark") setTheme("light");
+							if (theme === "light") setTheme("dark");
+						}}
+						size="icon"
+					>
+						{theme === "dark" ? (
+							<Sun className="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 transition-all dark:-rotate-90" />
+						) : (
+							<Moon className="absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
+						)}
+					</Button>
 				</div>
 			</div>
 		</header>

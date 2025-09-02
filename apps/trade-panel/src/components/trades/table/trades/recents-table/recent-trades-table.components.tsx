@@ -1,4 +1,5 @@
 "use client";
+import { Button } from "@workspace/ui/components/button";
 import { AgGridReact } from "ag-grid-react";
 import { useTheme } from "next-themes";
 
@@ -23,6 +24,10 @@ export function RecentsTradeTable() {
 				className="!h-[340px] mt-8"
 				rowHeight={55}
 			/>
+
+			<Button className="w-full mt-3 !text-foreground-secondary !bg-background">
+				Show more
+			</Button>
 		</div>
 	);
 }

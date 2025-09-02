@@ -3,7 +3,7 @@
 import * as echarts from "echarts";
 import React, { useEffect, useRef, useState } from "react";
 
-import { LineChartProps } from "./trades-chart.types";
+import { ILineChartProps } from "./trades-chart.types";
 
 // Dados fictícios para 365 dias
 const generateDummyData = (days: number) => {
@@ -19,7 +19,9 @@ const generateDummyData = (days: number) => {
 	return { labels, data };
 };
 
-export function TradesLineChart({ range = "1m" }: LineChartProps) {
+export function TradesLineChart(props: ILineChartProps) {
+	const { range = "1m", height = "100%", width = "100%" } = props;
+
 	const chartRef = useRef<HTMLDivElement | null>(null);
 	const [chartInstance, setChartInstance] = useState<echarts.EChartsType | null>(null);
 
@@ -89,5 +91,5 @@ export function TradesLineChart({ range = "1m" }: LineChartProps) {
 		return () => window.removeEventListener("resize", resizeChart);
 	}, [chartInstance]);
 
-	return <div ref={chartRef} style={{ width: "100%", height: "400px" }} />;
+	return <div ref={chartRef} style={{ width, height }} />;
 }
