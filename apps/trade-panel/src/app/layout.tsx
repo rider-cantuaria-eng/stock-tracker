@@ -4,6 +4,8 @@ import { ThemeProvider } from "@/src/core/context/theme.provider";
 import type { Metadata } from "next";
 import { Golos_Text } from "next/font/google";
 
+import { Footer } from "../components/layout/footer/footer.component";
+
 const golosTextFonts = Golos_Text({
 	variable: "--font-golos-text",
 	subsets: ["latin"],
@@ -25,10 +27,11 @@ export default function RootLayout({
 			<body className={`${golosTextFonts.variable} antialiased`}>
 				<ThemeProvider>
 					<div className="flex flex-col h-full min-h-dvh">
-						<main className="flex flex-col grow">
+						<div className="flex flex-col grow">
 							<Header />
 							<div className="flex justify-center items-center ">{children}</div>
-						</main>
+							<Footer />
+						</div>
 					</div>
 				</ThemeProvider>
 			</body>
