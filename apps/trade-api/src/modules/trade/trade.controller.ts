@@ -6,12 +6,14 @@ import {
   Body,
   Param,
   Delete,
+  Query,
 } from "@nestjs/common";
 import { Trade } from "@prisma/client";
 
 import { TradeService } from "./trade.service";
 import { TradeDto, UpdateTradeDto } from "./repository/dto";
 import { ResponseDto } from "../response.dto";
+import { TTradePeriodType } from "./trade.types";
 
 @Controller("portfolios/:portfolioId/trades")
 export class TradeController {
@@ -27,6 +29,24 @@ export class TradeController {
     const response = new ResponseDto<Trade>({
       message: `Trade for '${trade.ticker}' created successfully`,
       data: trade,
+    });
+
+    return response;
+  }
+
+  @Get("/report")
+  async getReport(
+    @Param("portfolioId") portfolioId: string,
+    @Query("period") period: TTradePeriodType,
+  ) {
+    const report = await this.tradeService.getReportByPortfolio(
+      portfolioId,
+      period,
+    );
+
+    const response = new ResponseDto<any>({
+      message: `Report for portfolio fetched successfully`,
+      data: report,
     });
 
     return response;
