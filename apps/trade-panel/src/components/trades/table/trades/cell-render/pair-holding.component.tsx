@@ -1,32 +1,18 @@
 import { ITrade } from "@workspace/api-client/types";
-import { Badge } from "@workspace/ui/components/badge";
-import { useTheme } from "next-themes";
-import NextImage from "next/image";
 
 export interface IPairHoldingProps {
 	data: ITrade;
 }
 
 export function PairHoldingCell({ data }: IPairHoldingProps) {
-	const { theme } = useTheme();
-
 	return (
 		<div className="flex items-center gap-3 text-foreground-secondary">
-			<NextImage
-				src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/1200px-Bitcoin.svg.png"
-				alt="bitcoin image"
-				width={25}
-				height={25}
-			/>
-			{data?.ticker}
-			<Badge
-				className="py-[0.7] px-1.5 rounded-sm h-fit bg-background font-medium"
-				style={{
-					color: theme === "dark" ? "#114C84" : "#868686",
-				}}
+			<div
+				className={`w-[25px] h-[25px] rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-sm font-medium`}
 			>
-				{data?.ticker}
-			</Badge>
+				{data?.ticker?.charAt(0)?.toUpperCase() || "?"}
+			</div>
+			{data?.ticker}
 		</div>
 	);
 }

@@ -13,6 +13,7 @@ function Input(props: InputProps) {
         </Label>
       )}
       <input
+        {...props}
         id={htmlFor}
         type={type}
         data-slot="input"
@@ -23,8 +24,7 @@ function Input(props: InputProps) {
           "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
           error && "border-destructive",
           className
-        )}
-        {...props}
+        )}        
       />
       {error && (
         <p className="text-destructive text-sm mt-1">{error}</p>

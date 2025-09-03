@@ -5,10 +5,12 @@ export interface IEntryPriceRendererProps {
 export function PriceCell({ value }: IEntryPriceRendererProps) {
 	return (
 		<span className="text-foreground-secondary">
-			{value.toLocaleString("en-US", {
-				style: "currency",
-				currency: "USD",
-			})}
+			{(value &&
+				value.toLocaleString("en-US", {
+					style: "currency",
+					currency: "USD",
+				})) ||
+				"N/A"}
 		</span>
 	);
 }

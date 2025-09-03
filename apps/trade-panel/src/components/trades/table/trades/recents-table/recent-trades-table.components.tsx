@@ -5,13 +5,15 @@ import { Button } from "@workspace/ui/components/button";
 import { cn } from "@workspace/ui/lib/utils";
 import { AgGridReact } from "ag-grid-react";
 import { useTheme } from "next-themes";
+import { useParams } from "next/navigation";
 
 import { UseRecentsTradeGrid } from "./hooks/recent-trades-grid.hook";
 
 import "../trades-table.style.css";
 
 export function RecentsTradeTable() {
-	const { colDefs, gridRef, rowData } = UseRecentsTradeGrid();
+	const { id: portfolioId } = useParams();
+	const { colDefs, gridRef, rowData } = UseRecentsTradeGrid(portfolioId as string);
 	const { theme } = useTheme();
 
 	return (

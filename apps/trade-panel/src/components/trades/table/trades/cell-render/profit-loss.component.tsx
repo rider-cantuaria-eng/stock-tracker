@@ -6,8 +6,12 @@ export interface IProfitOrLossRendererProps {
 	data: ITrade;
 }
 
-export function PnLCell({ data }: IProfitOrLossRendererProps) {
-	const difference = data.entryPrice - (data.exitPrice ?? 0);
+export function ProfitLossCell({ data }: IProfitOrLossRendererProps) {
+	if (!data.exitPrice) {
+		return <span className="flex items-center gap-1 text-foreground-secondary">N/A</span>;
+	}
+
+	const difference = data.entryPrice - data.exitPrice;
 	const isLoss = difference > 0;
 	const percentage = Math.abs((difference / data.entryPrice) * 100).toFixed(2);
 

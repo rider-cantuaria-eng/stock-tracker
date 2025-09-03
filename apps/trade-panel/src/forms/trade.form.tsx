@@ -1,12 +1,17 @@
-import { TradeFormInput } from "@workspace/schemas/trade";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+	tradeFormSchema,
+	TTradeFormInput,
+	TTradeFormRawInput,
+} from "@workspace/schemas/trade";
 import { DatePicker } from "@workspace/ui/components/date-picker";
 import { Input } from "@workspace/ui/components/input";
 import { useForm, Controller } from "react-hook-form";
 
 interface ITradeFormProps {
 	id: string;
-	onSubmit: (data: TradeFormInput) => void;
-	defaultValues?: Partial<TradeFormInput>;
+	onSubmit: (data: TTradeFormInput) => void;
+	defaultValues?: Partial<TTradeFormRawInput>;
 }
 
 export function TradeForm(props: ITradeFormProps) {
@@ -15,9 +20,9 @@ export function TradeForm(props: ITradeFormProps) {
 		onSubmit,
 		defaultValues = {
 			ticker: "",
-			entryPrice: 0,
-			exitPrice: 0,
-			quantity: 0,
+			entryPrice: "",
+			quantity: "",
+			exitPrice: "",
 			date: "",
 			portfolioId: "",
 		},
@@ -29,19 +34,21 @@ export function TradeForm(props: ITradeFormProps) {
 		formState: { errors },
 		reset,
 		control,
-	} = useForm<TradeFormInput>({
+	} = useForm<TTradeFormRawInput, unknown, TTradeFormInput>({
+		resolver: zodResolver(tradeFormSchema),
 		defaultValues: defaultValues,
 	});
 
-	const handleOnSubmit = async (data: TradeFormInput) => {
+	const handleOnSubmit = async (data: TTradeFormInput) => {
+		console.log("Form submitted with data:", data);
+		console.log("Form errors:", errors);
 		await onSubmit?.(data);
 		reset();
 	};
-
 	return (
 		<form id={id} onSubmit={handleSubmit(handleOnSubmit)}>
 			<div className="grid grid-cols-2 gap-4">
-				<div>
+				<div className="col-span-2">
 					<Input
 						label="Ticker"
 						placeholder="GOOG"
@@ -87,13 +94,14 @@ export function TradeForm(props: ITradeFormProps) {
 					<Controller
 						name="date"
 						control={control}
-						render={() => (
-							<div>
-								<DatePicker label="Date of trade" />
-								{errors.date && (
-									<p className="text-sm text-red-500 mt-1">{errors.date.message}</p>
-								)}
-							</div>
+						render={({ field }) => (
+							<DatePicker
+								label="Date of trade"
+								value={field.value}
+								onChange={field.onChange}
+								error={errors.date?.message}
+								showTime={true}
+							/>
 						)}
 					/>
 				</div>

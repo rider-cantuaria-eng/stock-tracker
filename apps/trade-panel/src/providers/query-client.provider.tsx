@@ -10,11 +10,11 @@ export function QueryClientProviderWrapper({ children }: { children: React.React
 			new QueryClient({
 				defaultOptions: {
 					queries: {
-						staleTime: 1000 * 60 * 5, // 5 minutos
-						gcTime: 1000 * 60 * 10, // 10 minutos (anteriormente cacheTime)
+						staleTime: 1000 * 60 * 5, // 5 minutes
+						gcTime: 1000 * 60 * 10, // 10 minutes (previously cacheTime)
 						retry: (failureCount, error) => {
-							// Não tentar novamente para erros 404
-							if (error instanceof Error && error.message.includes("404")) {
+							// Don't retry for 404 errors
+							if (error.message.includes("404")) {
 								return false;
 							}
 							return failureCount < 3;
