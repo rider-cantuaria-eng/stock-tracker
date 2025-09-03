@@ -15,8 +15,6 @@ export function AppLogo(props: ILogoProps) {
 
 	const { theme } = useTheme();
 
-	console.log(theme);
-
 	return (
 		<NoSSR>
 			<Image

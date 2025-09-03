@@ -31,8 +31,6 @@ export function ModalCreateTrade(props: IModalCreateTradeProps) {
 
 	const onSubmit = async (data: TTradeFormInput) => {
 		try {
-			console.log("data", data);
-
 			if (!portfolioId) {
 				throw new Error("Portfolio ID is required");
 			}
@@ -76,7 +74,9 @@ export function ModalCreateTrade(props: IModalCreateTradeProps) {
 				<TradeForm id="create-trade-form" onSubmit={onSubmit} />
 				<DialogFooter>
 					<DialogClose asChild>
-						<Button variant="outline">Cancel</Button>
+						<Button variant="outline" type="button">
+							Cancel
+						</Button>
 					</DialogClose>
 					<Button
 						type="submit"

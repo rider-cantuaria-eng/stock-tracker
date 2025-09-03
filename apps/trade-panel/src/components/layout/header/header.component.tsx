@@ -17,7 +17,7 @@ export function Header() {
 	const { isMobile } = useMobileDevice();
 
 	const { id: portfolioId } = useParams();
-	const portfolio = usePortfolio(portfolioId as string)?.data;
+	const portfolio = usePortfolio(portfolioId as string);
 	const portfolios = usePortfolios();
 
 	if (isMobile) {
@@ -36,8 +36,9 @@ export function Header() {
 				<div className="flex items-center">
 					<b>Portfolio</b>:
 					<DropdownPortfolio
-						title={`${portfolio?.name} • $${portfolio?.initialValue.toLocaleString()}`}
+						title={`${portfolio.data?.name} • $${portfolio.data?.initialValue.toLocaleString()}`}
 						portfolios={portfolios?.data ?? []}
+						isLoading={portfolios?.isLoading || portfolio?.isLoading}
 					/>
 					<NoSSR>
 						<Button

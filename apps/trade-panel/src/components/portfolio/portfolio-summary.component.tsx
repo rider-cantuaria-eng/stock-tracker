@@ -10,10 +10,13 @@ import { IoWalletOutline } from "react-icons/io5";
 import { CreatePortfolioModal } from "../modal/portfolio/create-portfolio.modal";
 import { UpdatePortfolioModal } from "../modal/portfolio/update-portfolio.modal";
 import { WelcomePortfolioModal } from "../modal/portfolio/welcome.portfolio.modal";
+import { PortfolioSummarySkeleton } from "./portfolio-summary.skeleton";
 
 export function PortfolioSummary() {
 	const { id: portfolioId } = useParams();
 	const portfolio = usePortfolio(portfolioId as string);
+
+	if (portfolio.isLoading) return <PortfolioSummarySkeleton />;
 
 	return (
 		<>

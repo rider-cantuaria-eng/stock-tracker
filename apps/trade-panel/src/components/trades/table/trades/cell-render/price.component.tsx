@@ -1,8 +1,12 @@
+import { SkeletonCell } from "../loading-table.component";
+
 export interface IEntryPriceRendererProps {
 	value: number;
 }
 
 export function PriceCell({ value }: IEntryPriceRendererProps) {
+	if (!value) return <SkeletonCell />;
+
 	return (
 		<span className="text-foreground-secondary">
 			{(value &&

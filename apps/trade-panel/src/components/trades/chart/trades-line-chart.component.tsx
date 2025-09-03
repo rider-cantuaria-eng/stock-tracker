@@ -1,9 +1,6 @@
 "use client";
 
-import { useTradeReport } from "@workspace/api-client/hooks";
-import { TTradePeriodType } from "@workspace/api-client/types";
 import * as echarts from "echarts";
-import { useParams } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 
 import { ILineChartProps } from "./trades-chart.types";
@@ -22,22 +19,17 @@ const generateDummyData = (days: number) => {
 };
 
 export function TradesLineChart(props: ILineChartProps) {
-	const { range = "1m", height = "100%", width = "100%" } = props;
+	const { range = "1m", height = "100%", width = "100%", data = [] } = props;
 
 	const chartRef = useRef<HTMLDivElement | null>(null);
 	const [chartInstance, setChartInstance] = useState<echarts.EChartsType | null>(null);
 
-	const { id: portfolioId } = useParams();
-	const report = useTradeReport(portfolioId as string, range as TTradePeriodType);
-
 	const getFilteredData = () => {
 		return {
-			labels: Array.from(report.data?.map(item => item.label) || []),
-			data: Array.from(report.data?.map(item => item.value) || []),
+			labels: Array.from(data?.map(item => item.label) || []),
+			data: Array.from(data?.map(item => item.value) || []),
 		};
 	};
-
-	console.log(generateDummyData(7), getFilteredData());
 
 	useEffect(() => {
 		if (chartRef.current) {
@@ -48,7 +40,7 @@ export function TradesLineChart(props: ILineChartProps) {
 	}, []);
 
 	useEffect(() => {
-		if (chartInstance) {
+		if (chartInstance && data) {
 			const filtered = getFilteredData();
 			chartInstance.setOption({
 				xAxis: {
@@ -62,7 +54,7 @@ export function TradesLineChart(props: ILineChartProps) {
 			});
 			chartInstance.resize();
 		}
-	}, [range, chartInstance, report.data]);
+	}, [range, chartInstance, data]);
 
 	useEffect(() => {
 		const resizeChart = () => chartInstance?.resize();

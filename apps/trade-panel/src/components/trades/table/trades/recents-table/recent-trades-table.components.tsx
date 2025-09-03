@@ -13,7 +13,9 @@ import "../trades-table.style.css";
 
 export function RecentsTradeTable() {
 	const { id: portfolioId } = useParams();
-	const { colDefs, gridRef, rowData } = UseRecentsTradeGrid(portfolioId as string);
+	const { colDefs, gridRef, rowData, rowDataLoading, loading } = UseRecentsTradeGrid(
+		portfolioId as string,
+	);
 	const { theme } = useTheme();
 
 	return (
@@ -33,7 +35,7 @@ export function RecentsTradeTable() {
 				>
 					<AgGridReact
 						ref={gridRef}
-						rowData={rowData}
+						rowData={loading ? rowDataLoading[0] : rowData}
 						columnDefs={colDefs}
 						rowHeight={55}
 						domLayout="autoHeight"

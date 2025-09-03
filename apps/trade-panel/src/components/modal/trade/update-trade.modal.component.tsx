@@ -77,7 +77,9 @@ export function ModalEditTrade(props: IModalEditTradeProps) {
 				/>
 				<DialogFooter>
 					<DialogClose asChild>
-						<Button variant="outline">Cancel</Button>
+						<Button variant="outline" type="button">
+							Cancel
+						</Button>
 					</DialogClose>
 					<Button
 						type="submit"

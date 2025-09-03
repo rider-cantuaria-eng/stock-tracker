@@ -13,6 +13,9 @@ body {
 		/* color: #868686 !important; */
 	}
 }
+.ag-body-viewport {
+	min-height: 200px !important;
+}
 
 .ag-root-wrapper {
 	background: transparent;

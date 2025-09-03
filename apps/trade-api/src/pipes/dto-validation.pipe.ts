@@ -7,7 +7,7 @@ export class DTOValidationPipe extends ValidationPipe {
       forbidNonWhitelisted: true, // Throw error if non-whitelisted properties are present
       transform: true, // Automatically transform payloads to DTO instances
       exceptionFactory: (errors) => {
-        console.log("Failed to validate inputs: ", errors);
+        console.error("Failed to validate inputs: ", errors);
 
         // Get all input errors from the request, to easily manage the input errors on API response
         const inputs = errors.reduce(

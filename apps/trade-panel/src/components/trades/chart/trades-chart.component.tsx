@@ -1,5 +1,7 @@
 "use client";
 
+import { useTradeReport } from "@workspace/api-client/hooks";
+import { TTradePeriodType } from "@workspace/api-client/types";
 import { Button } from "@workspace/ui/components/button";
 import {
 	Dialog,
@@ -9,14 +11,18 @@ import {
 	DialogTrigger,
 } from "@workspace/ui/components/dialog";
 import { Tabs, TabsList, TabsTrigger } from "@workspace/ui/components/tabs";
+import { useParams } from "next/navigation";
 import { useState } from "react";
 import { RxExitFullScreen } from "react-icons/rx";
 
+import { TradesChartSkeleton } from "./trades-chart.skeleton";
 import { RangeType } from "./trades-chart.types";
 import { TradesLineChart } from "./trades-line-chart.component";
 
 export function TradesChart() {
 	const [range, setRange] = useState<RangeType>("7d");
+	const { id: portfolioId } = useParams();
+	const report = useTradeReport(portfolioId as string, range as TTradePeriodType);
 
 	return (
 		<section className="relative !w-full h-fit bg-background-secondary rounded-md p-7 mb-[1.5rem]">
@@ -67,7 +73,11 @@ export function TradesChart() {
 				</TabsList>
 			</Tabs>
 
-			<TradesLineChart range={range as RangeType} height="400px" />
+			{report?.isLoading ? (
+				<TradesChartSkeleton />
+			) : (
+				<TradesLineChart range={range as RangeType} height="400px" data={report?.data} />
+			)}
 
 			<Dialog>
 				<DialogTrigger asChild>
@@ -80,7 +90,7 @@ export function TradesChart() {
 						<DialogTitle className="!hidden"></DialogTitle>
 					</DialogHeader>
 					<div>
-						<TradesLineChart range={range as RangeType} />
+						<TradesLineChart range={range as RangeType} data={report?.data} />
 					</div>
 				</DialogContent>
 			</Dialog>

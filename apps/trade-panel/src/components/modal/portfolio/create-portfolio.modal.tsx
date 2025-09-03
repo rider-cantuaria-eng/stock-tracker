@@ -64,11 +64,6 @@ export function CreatePortfolioModal() {
 								variant="outline"
 								type="button"
 								disabled={createPortfolioMutation.isPending}
-								onClick={() => {
-									toast.success("Portfolio creation cancelled", {
-										description: "You can create a new portfolio later.",
-									});
-								}}
 							>
 								Cancel
 							</Button>

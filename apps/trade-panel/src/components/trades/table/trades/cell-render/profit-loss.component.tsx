@@ -2,13 +2,15 @@ import { ITrade } from "@workspace/api-client/types";
 import { FiPlus, FiMinus } from "react-icons/fi";
 import { IoIosTrendingUp, IoIosTrendingDown } from "react-icons/io";
 
+import { SkeletonCell } from "../loading-table.component";
+
 export interface IProfitOrLossRendererProps {
 	data: ITrade;
 }
 
 export function ProfitLossCell({ data }: IProfitOrLossRendererProps) {
 	if (!data.exitPrice) {
-		return <span className="flex items-center gap-1 text-foreground-secondary">N/A</span>;
+		return <SkeletonCell />;
 	}
 
 	const difference = data.entryPrice - data.exitPrice;

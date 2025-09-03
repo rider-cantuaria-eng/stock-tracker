@@ -2,7 +2,7 @@ import { RecentsTradeTable } from "../table/trades/recents-table/recent-trades-t
 
 export function RecentsTrades() {
 	return (
-		<section className="!w-full h-fit bg-background-secondary rounded-md  mb-[1.5rem]">
+		<section className="!w-full h-fit bg-background-secondary rounded-md ">
 			<RecentsTradeTable />
 		</section>
 	);
