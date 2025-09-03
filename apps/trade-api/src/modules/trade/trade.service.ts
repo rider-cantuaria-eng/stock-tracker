@@ -4,6 +4,8 @@ import { TradeDto } from "./repository/dto";
 import { TradeRepository } from "./repository/trade.repository";
 import { PortfolioService } from "../portfolio/portfolio.service";
 import { ServiceErrorException } from "src/exceptions/service-error.exception";
+import { TTradePeriodType } from "./trade.types";
+import { calculateProfitLossByDate } from "./trade.helper";
 
 @Injectable()
 export class TradeService {
@@ -67,7 +69,7 @@ export class TradeService {
         await this.portfolioService.findPortfolioById(portfolioId);
       const trades = await this.tradeRepo.findAllByPortfolio(portfolioId);
 
-      console.debug("trades fetched on database...", trades);
+      console.debug("trades fetched on database...");
 
       return {
         portfolio,
@@ -182,6 +184,29 @@ export class TradeService {
 
       throw new ServiceErrorException(
         `Error deleting all trades for portfolio ${portfolioId}`,
+      );
+    }
+  }
+
+  // Reports AREA
+  async getReportByPortfolio(portfolioId: string, period: TTradePeriodType) {
+    try {
+      const { trades } = await this.findAllByPortfolio(portfolioId);
+
+      console.debug("trades fetched on database...");
+
+      const tradesWithProfitLoss = calculateProfitLossByDate(trades, period);
+
+      return tradesWithProfitLoss;
+    } catch (error) {
+      console.error(error);
+
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+
+      throw new ServiceErrorException(
+        `Error fetching trades report for portfolio ${portfolioId}`,
       );
     }
   }

@@ -6,16 +6,16 @@ body {
 	margin: 0;
 }
 
-.ag-root-wrapper {
-	background: transparent;
+@media (max-width: 500px) {
+	.ag-paging-panel {
+		display: flex;
+		flex-direction: column;
+		/* color: #868686 !important; */
+	}
 }
 
-@media screen and (max-width: 720px) {
-	div.ag-theme-quartz,
-	div.ag-theme-quartz-dark {
-		--ag-font-size: 12px;
-		--ag-grid-size: 6px;
-	}
+.ag-root-wrapper {
+	background: transparent;
 }
 
 .ag-theme-quartz .ag-body-viewport,
@@ -80,6 +80,10 @@ body {
 .ag-theme-quartz .ag-right-aligned-cell,
 .ag-theme-quartz-dark .ag-right-aligned-cell {
 	justify-content: flex-end;
+}
+
+.ag-header {
+	border: none !important;
 }
 
 .ag-theme-quartz-dark .ag-header {
