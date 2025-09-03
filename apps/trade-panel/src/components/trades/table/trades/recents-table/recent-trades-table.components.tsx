@@ -1,6 +1,6 @@
 "use client";
 
-import { NoSSR } from "@/src/components/ui/no-ssr";
+import { NoSSR } from "@/src/components/layout/no-ssr.component";
 import { Button } from "@workspace/ui/components/button";
 import { cn } from "@workspace/ui/lib/utils";
 import { AgGridReact } from "ag-grid-react";

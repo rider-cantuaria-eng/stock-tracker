@@ -16,7 +16,8 @@ import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { IoIosArrowDown } from "react-icons/io";
 
-import { NoSSR } from "../../ui/no-ssr";
+import { AppLogo } from "../app-logo.component";
+import { NoSSR } from "../no-ssr.component";
 import { HeaderMobile } from "./header-mobile.component";
 
 export function Header() {
@@ -31,7 +32,7 @@ export function Header() {
 		<header className="flex items-center justify-center px-4 h-[98px] bg-background-secondary border-b-1 border-b-border-secondary">
 			<div className="flex justify-between max-w-[1600px] w-full h-full">
 				<nav className="flex items-center gap-4 h">
-					<span className="flex items-center text-foreground-secondary">LOGO</span>
+					<AppLogo width={150} height={39} />
 
 					<div className="bg-[#4C4D52] w-[1px] h-[50px] mx-[1.5rem]"></div>
 				</nav>

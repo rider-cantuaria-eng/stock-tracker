@@ -1,7 +1,7 @@
 import { cn } from "@workspace/ui/lib/utils";
 import { IoIosTrendingUp } from "react-icons/io";
 
-import { NoSSR } from "../ui/no-ssr";
+import { NoSSR } from "../layout/no-ssr.component";
 import { ICardInvestmentInfoProps } from "./types";
 
 export function CardInvestmentInfo(props: ICardInvestmentInfoProps) {
