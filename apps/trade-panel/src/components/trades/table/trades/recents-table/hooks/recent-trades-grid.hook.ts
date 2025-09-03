@@ -4,7 +4,7 @@ import { useTrades } from "@workspace/api-client/hooks";
 import { ITrade } from "@workspace/api-client/types";
 import { AllCommunityModule, ColDef, ModuleRegistry } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
-import { useMemo, useRef } from "react";
+import { useMemo, useRef, useState } from "react";
 
 import { PairHoldingCell, PnLCell } from "../../cell-render";
 
@@ -15,6 +15,20 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 
 export function UseRecentsTradeGrid(portfolioId: string) {
 	const gridRef = useRef<AgGridReact>(null);
+	const rowDataLoading = useState(
+		Array(5).fill({
+			id: null,
+			ticker: null,
+			entryPrice: 0,
+			exitPrice: 0,
+			quantity: 0,
+			date: new Date(),
+			portfolioId: null,
+			createdAt: null,
+			updatedAt: null,
+		}),
+	);
+
 	const trades = useTrades(portfolioId);
 
 	const colDefs = useMemo<ColDef<ITrade>[]>(
@@ -44,6 +58,8 @@ export function UseRecentsTradeGrid(portfolioId: string) {
 	return {
 		colDefs,
 		rowData: trades.data,
+		loading: trades.isLoading,
 		gridRef,
+		rowDataLoading,
 	};
 }

@@ -1,4 +1,3 @@
-import { FooterNewsletter } from "../../newslettter/newsletter.component";
 import { AppLogo } from "../app-logo.component";
 import { navSections, socialLinks } from "./footer.const";
 import { FooterSocialLinks } from "./fotter-social-links.component";
@@ -11,7 +10,6 @@ export function Footer() {
 				<AppLogo width={100} height={26} />
 				<div className="grid py-12 grid-cols-[repeat(auto-fit,minmax(200px,1fr))]">
 					<NavFooterList navSections={navSections} />
-					<FooterNewsletter />
 				</div>
 
 				<FooterSocialLinks socialLinks={socialLinks} />

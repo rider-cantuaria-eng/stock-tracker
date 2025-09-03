@@ -5,7 +5,7 @@ import { ITrade } from "@workspace/api-client/types";
 import type { ColDef } from "ag-grid-community";
 import { AllCommunityModule, ModuleRegistry } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
-import { useMemo, useRef } from "react";
+import { useMemo, useRef, useState } from "react";
 
 import { DateCell, PairHoldingCell, PnLCell, PriceCell } from "../../cell-render/index";
 import { QuantityCell } from "../../cell-render/quantity.component";
@@ -17,6 +17,21 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 
 export function useTradesGrid(portfolioId?: string) {
 	const gridRef = useRef<AgGridReact>(null);
+
+	const rowDataLoading = useState(
+		Array(8).fill({
+			id: null,
+			ticker: null,
+			entryPrice: 0,
+			exitPrice: 0,
+			quantity: 0,
+			date: new Date(),
+			portfolioId: null,
+			createdAt: null,
+			updatedAt: null,
+		}),
+	);
+
 	const trades = useTrades(portfolioId as string);
 
 	const colDefs = useMemo<ColDef<ITrade>[]>(
@@ -78,6 +93,7 @@ export function useTradesGrid(portfolioId?: string) {
 				minWidth: 160,
 				cellRenderer: DateCell,
 				cellRendererParams: (params: { data: ITrade }) => ({
+					id: params?.data?.id,
 					date: new Date(params.data?.date),
 				}),
 			},
@@ -89,5 +105,6 @@ export function useTradesGrid(portfolioId?: string) {
 		colDefs,
 		rowData: trades.data,
 		gridRef,
+		rowDataLoading,
 	};
 }

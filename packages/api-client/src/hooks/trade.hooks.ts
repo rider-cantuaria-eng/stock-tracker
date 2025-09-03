@@ -78,8 +78,7 @@ export function useDeleteTrade() {
 }
 
 // Trade Report hooks
-export function useTradeReport(portfolioId: string, period: TTradePeriodType) {
-  console.log("useTradeReport", portfolioId, period);
+export function useTradeReport(portfolioId: string, period: TTradePeriodType) {  
   return useQuery({
     queryKey: tradeKeys.report(portfolioId, period),
     queryFn: () => apiClient.getTradeReport(portfolioId, period),

@@ -5,7 +5,7 @@ import { NoSSR } from "../layout/no-ssr.component";
 import { ICardInvestmentInfoProps } from "./types";
 
 export function CardInvestmentInfo(props: ICardInvestmentInfoProps) {
-	const { title, className, icon, value, increase } = props;
+	const { title, className, icon, value, increase, isLoading } = props;
 
 	return (
 		<div
@@ -18,20 +18,23 @@ export function CardInvestmentInfo(props: ICardInvestmentInfoProps) {
 				{icon && icon}
 				{title}
 			</span>
-
-			<h4 className="flex items-center gap-[0.3rem] text-lg ">
-				<NoSSR>
-					{value?.toLocaleString("eu-US", {
-						style: "currency",
-						currency: "USD",
-					})}
-				</NoSSR>
-				{increase && (
-					<span className="flex items-center text-sm font-medium text-[#19A173] gap-[0.2rem]">
-						+2% <IoIosTrendingUp />
-					</span>
-				)}
-			</h4>
+			{isLoading ? (
+				<div className="h-8 w-32 bg-foreground/20 rounded" />
+			) : (
+				<h4 className="flex items-center gap-[0.3rem] text-lg ">
+					<NoSSR>
+						{value?.toLocaleString("eu-US", {
+							style: "currency",
+							currency: "USD",
+						})}
+					</NoSSR>
+					{increase && (
+						<span className="flex items-center text-sm font-medium text-[#19A173] gap-[0.2rem]">
+							+2% <IoIosTrendingUp />
+						</span>
+					)}
+				</h4>
+			)}
 		</div>
 	);
 }

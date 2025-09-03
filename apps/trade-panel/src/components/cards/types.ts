@@ -7,4 +7,5 @@ export interface ICardInvestmentInfoProps {
 		value: string | number;
 	};
 	className?: string;
+	isLoading?: boolean;
 }

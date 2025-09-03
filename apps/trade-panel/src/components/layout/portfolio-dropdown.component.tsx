@@ -15,12 +15,15 @@ import { IoIosArrowDown } from "react-icons/io";
 interface IListPortfolioProps {
 	title: string;
 	portfolios: IPortfolio[];
+	isLoading?: boolean;
 }
 
 export function DropdownPortfolio(props: IListPortfolioProps) {
-	const { title, portfolios } = props;
+	const { title, portfolios, isLoading } = props;
 	const pathname = usePathname();
 	const router = useRouter();
+
+	if (isLoading) return <div className="h-4 w-32 bg-foreground/20 rounded mx-3" />;
 
 	if (portfolios?.length <= 0)
 		return <span className="text-sm px-2">No portfolios found.</span>;

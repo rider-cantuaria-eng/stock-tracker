@@ -40,8 +40,6 @@ export function TradeForm(props: ITradeFormProps) {
 	});
 
 	const handleOnSubmit = async (data: TTradeFormInput) => {
-		console.log("Form submitted with data:", data);
-		console.log("Form errors:", errors);
 		await onSubmit?.(data);
 		reset();
 	};

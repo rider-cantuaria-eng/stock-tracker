@@ -20,7 +20,9 @@ export function TradesTable() {
 	const [selectedTrade, setSelectedTrade] = useState<ITrade | null>(null);
 	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-	const { colDefs, gridRef, rowData } = useTradesGrid(portfolioId as string);
+	const { colDefs, gridRef, rowData, rowDataLoading } = useTradesGrid(
+		portfolioId as string,
+	);
 	const { theme } = useTheme();
 
 	const handleRowClick = (event: any) => {
@@ -30,11 +32,13 @@ export function TradesTable() {
 	};
 
 	return (
-		<div className={` !w-full h-fit bg-background-secondary rounded-md p-7 `}>
-			<div className="flex justify-between items-center">
+		<div className={`flex-1 !w-full h-fit bg-background-secondary rounded-md p-7 `}>
+			<div className="flex flex-col sm:flex-row justify-between items-center">
 				<div>
-					<h2 className="text-xl font-medium text-foreground-secondary">Trades</h2>
-					<p className="text-sm text-foreground-secondary">
+					<h2 className="text-xl font-medium text-foreground-secondary text-center sm:text-start">
+						Trades
+					</h2>
+					<p className="text-sm text-foreground-secondary text-center sm:text-start">
 						All your portfolio trades tracked. <b>To edit a trade, click on it.</b>
 					</p>
 				</div>
@@ -44,13 +48,13 @@ export function TradesTable() {
 			<NoSSR>
 				<div
 					className={cn(
-						`mt-4 w-full`,
+						`mt-4 w-full h-full min-h-[400px]`,
 						theme === "light" ? "ag-theme-quartz" : "ag-theme-quartz-dark",
 					)}
 				>
 					<AgGridReact
 						ref={gridRef}
-						rowData={rowData}
+						rowData={portfolio?.isLoading ? rowDataLoading[0] : rowData}
 						columnDefs={colDefs}
 						rowHeight={63}
 						domLayout="autoHeight"
