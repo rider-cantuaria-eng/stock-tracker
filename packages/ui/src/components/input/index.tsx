@@ -2,7 +2,9 @@ import { cn } from "@workspace/ui/lib/utils";
 import { InputProps } from "./types";
 import { Label } from "../label";
 
-function Input({ className, label, htmlFor, type, error, ...props }: InputProps) {
+function Input(props: InputProps) {
+  const { className, label, htmlFor, type, error } = props;
+
   return (
     <div className="w-full">
       {label && (

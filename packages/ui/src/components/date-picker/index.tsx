@@ -8,15 +8,19 @@ import { Label } from "../label";
 import { Button } from "../button";
 import { Calendar } from "../calendar";
 
-export function DatePicker() {
+interface IDatePickerProps {
+  label?: string;
+}
+
+export function DatePicker(props: IDatePickerProps) {
+  const { label } = props;
+
   const [open, setOpen] = React.useState(false);
   const [date, setDate] = React.useState<Date | undefined>(undefined);
 
   return (
     <div className="flex flex-col gap-3 w-full">
-      <Label htmlFor="date" className="px-1">
-        Date of birth
-      </Label>
+      <Label htmlFor="date" className="px-1">{label}</Label>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button

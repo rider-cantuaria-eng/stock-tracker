@@ -1,14 +1,5 @@
+import { usePortfolio, usePortfolios } from "@workspace/api-client/hooks";
 import { Button } from "@workspace/ui/components/button";
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuGroup,
-	DropdownMenuItem,
-	DropdownMenuLabel,
-	DropdownMenuSeparator,
-	DropdownMenuShortcut,
-	DropdownMenuTrigger,
-} from "@workspace/ui/components/dropdown-menu";
 import {
 	Sheet,
 	SheetClose,
@@ -18,13 +9,18 @@ import {
 	SheetTitle,
 	SheetTrigger,
 } from "@workspace/ui/components/sheet";
-import { IoIosArrowDown } from "react-icons/io";
+import { useParams } from "next/navigation";
 
 import { TradesChart } from "../../trades/chart/trades-chart.component";
 import { RecentsTrades } from "../../trades/recents-trades/recent-trades.component";
 import { AppLogo } from "../app-logo.component";
+import { DropdownPortfolio } from "../portfolio-dropdown.component";
 
 export function HeaderMobile() {
+	const { id: portfolioId } = useParams();
+	const portfolio = usePortfolio(portfolioId as string)?.data;
+	const portfolios = usePortfolios();
+
 	return (
 		<header className="flex items-center justify-center h-[98px] bg-background-secondary border-b-1 border-b-border-secondary px-4">
 			<div className="flex justify-between max-w-[1600px] w-full h-full">
@@ -43,35 +39,10 @@ export function HeaderMobile() {
 								<SheetTitle className="hidden"></SheetTitle>
 							</SheetHeader>
 							<div className="py-5">
-								<DropdownMenu>
-									<DropdownMenuTrigger asChild>
-										<Button
-											variant="ghost"
-											className="darK:text-white font-medium text-md"
-										>
-											Total value in 2.10983 BTC
-											<IoIosArrowDown />
-										</Button>
-									</DropdownMenuTrigger>
-									<DropdownMenuContent className="w-56" align="start">
-										<DropdownMenuLabel>My Portifolios</DropdownMenuLabel>
-										<DropdownMenuGroup>
-											<DropdownMenuItem>
-												kucoin
-												<DropdownMenuShortcut>2.10983 BTC</DropdownMenuShortcut>
-											</DropdownMenuItem>
-											<DropdownMenuItem>
-												bybit
-												<DropdownMenuShortcut>2.10983 BTC</DropdownMenuShortcut>
-											</DropdownMenuItem>
-										</DropdownMenuGroup>
-										<DropdownMenuSeparator />
-										<DropdownMenuItem>
-											Log out
-											<DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-										</DropdownMenuItem>
-									</DropdownMenuContent>
-								</DropdownMenu>
+								<DropdownPortfolio
+									title={`${portfolio?.name} • $${portfolio?.initialValue.toLocaleString()}`}
+									portfolios={portfolios?.data ?? []}
+								/>
 
 								<TradesChart />
 								<RecentsTrades />

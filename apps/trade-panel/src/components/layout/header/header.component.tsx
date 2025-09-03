@@ -1,28 +1,24 @@
 "use client";
 
 import { useMobileDevice } from "@/src/hooks/mobile-device.hook";
+import { usePortfolio, usePortfolios } from "@workspace/api-client/hooks";
 import { Button } from "@workspace/ui/components/button";
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuGroup,
-	DropdownMenuItem,
-	DropdownMenuLabel,
-	DropdownMenuSeparator,
-	DropdownMenuShortcut,
-	DropdownMenuTrigger,
-} from "@workspace/ui/components/dropdown-menu";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
-import { IoIosArrowDown } from "react-icons/io";
+import { useParams } from "next/navigation";
 
 import { AppLogo } from "../app-logo.component";
 import { NoSSR } from "../no-ssr.component";
+import { DropdownPortfolio } from "../portfolio-dropdown.component";
 import { HeaderMobile } from "./header-mobile.component";
 
 export function Header() {
 	const { theme, setTheme } = useTheme();
 	const { isMobile } = useMobileDevice();
+
+	const { id: portfolioId } = useParams();
+	const portfolio = usePortfolio(portfolioId as string)?.data;
+	const portfolios = usePortfolios();
 
 	if (isMobile) {
 		return <HeaderMobile />;
@@ -38,33 +34,11 @@ export function Header() {
 				</nav>
 
 				<div className="flex items-center">
-					<DropdownMenu>
-						<DropdownMenuTrigger asChild>
-							<Button variant="ghost" className="darK:text-white font-medium text-md">
-								Total value in 2.10983 BTC
-								<IoIosArrowDown />
-							</Button>
-						</DropdownMenuTrigger>
-						<DropdownMenuContent className="w-56" align="start">
-							<DropdownMenuLabel>My Portifolios</DropdownMenuLabel>
-							<DropdownMenuGroup>
-								<DropdownMenuItem>
-									kucoin
-									<DropdownMenuShortcut>2.10983 BTC</DropdownMenuShortcut>
-								</DropdownMenuItem>
-								<DropdownMenuItem>
-									bybit
-									<DropdownMenuShortcut>2.10983 BTC</DropdownMenuShortcut>
-								</DropdownMenuItem>
-							</DropdownMenuGroup>
-							<DropdownMenuSeparator />
-							<DropdownMenuItem>
-								Log out
-								<DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-							</DropdownMenuItem>
-						</DropdownMenuContent>
-					</DropdownMenu>
-
+					<b>Portfolio</b>:
+					<DropdownPortfolio
+						title={`${portfolio?.name} • $${portfolio?.initialValue.toLocaleString()}`}
+						portfolios={portfolios?.data ?? []}
+					/>
 					<NoSSR>
 						<Button
 							variant="outline"
