@@ -19,7 +19,7 @@ COPY apps/trade-api/package.json ./apps/trade-api/
 COPY packages/ ./packages/
 
 # Install dependencies
-RUN pnpm install --no-frozen-lockfile --prefer-offline
+RUN pnpm install --frozen-lockfile
 
 # Rebuild the source code only when needed
 FROM base AS builder
@@ -34,8 +34,11 @@ COPY --from=deps /app/packages ./packages
 COPY apps/trade-api ./apps/trade-api
 COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
 
+# Install Prisma CLI globally for generation
+RUN npm install -g prisma@6.15.0
+
 # Generate Prisma client
-RUN cd apps/trade-api && pnpm exec prisma generate
+RUN cd apps/trade-api && prisma generate
 
 # Build the application
 RUN cd apps/trade-api && pnpm build
