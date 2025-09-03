@@ -1,6 +1,7 @@
 import { Trade } from "@prisma/client";
+
+import { ServiceErrorException } from "../../exceptions/service-error.exception";
 import { TTradePeriodType } from "./trade.types";
-import { ServiceErrorException } from "src/exceptions/service-error.exception";
 
 const periodToDays: Record<TTradePeriodType, number | null> = {
   "7d": 7,

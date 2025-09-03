@@ -4,7 +4,7 @@ import { TradeDto } from "./repository/dto";
 import { TradeRepository } from "./repository/trade.repository";
 import { PortfolioService } from "../portfolio/portfolio.service";
 import { ServiceErrorException } from "src/exceptions/service-error.exception";
-import { TTradePeriodType } from "./trade.types";
+import { IPaginationParams, TTradePeriodType } from "./trade.types";
 import { calculateProfitLossByDate } from "./trade.helper";
 
 @Injectable()
@@ -84,6 +84,41 @@ export class TradeService {
 
       throw new ServiceErrorException(
         `Error fetching trades for portfolio ${portfolioId}`,
+      );
+    }
+  }
+
+  async findRecentsByPortfolio(portfolioId: string, page: number) {
+    try {
+      const paginationParams: IPaginationParams = {
+        page,
+        limit: 5,
+        sortBy: "updatedAt",
+        sortOrder: "desc",
+      };
+
+      const portfolio =
+        await this.portfolioService.findPortfolioById(portfolioId);
+      const paginatedTrades = await this.tradeRepo.findAllByPortfolioPaginated(
+        portfolioId,
+        paginationParams,
+      );
+
+      console.debug("paginated trades fetched on database...");
+
+      return {
+        portfolio,
+        ...paginatedTrades,
+      };
+    } catch (error) {
+      console.error(error);
+
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+
+      throw new ServiceErrorException(
+        `Error fetching paginated trades for portfolio ${portfolioId}`,
       );
     }
   }
