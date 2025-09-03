@@ -4,7 +4,6 @@ import { NestFactory } from "@nestjs/core";
 
 import { AppModule } from "./app.module";
 import { PrismaExceptionFilter } from "./filters/prisma-exception.filters";
-import { BadRequestException, ValidationPipe } from "@nestjs/common";
 import { DTOValidationPipe } from "./pipes/dto-validation.pipe";
 import { AllExceptionsFilter } from "./filters/all-exception.filters";
 
