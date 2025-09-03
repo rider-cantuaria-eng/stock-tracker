@@ -56,3 +56,13 @@ export interface IApiError {
   message: string;
   inputs?: Record<string, string[]>;
 }
+
+// Report Types
+export type TTradePeriodType = "7d" | "15d" | "1m" | "6m" | "1y" | "all";
+
+export interface ITradeReportDataPoint {
+  label: string;
+  value: number;
+}
+
+export type ITradeReport = ITradeReportDataPoint[];

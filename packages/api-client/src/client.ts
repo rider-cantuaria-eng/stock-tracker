@@ -7,6 +7,8 @@ import type {
   IUpdatePortfolioRequest,
   ICreateTradeRequest,
   IUpdateTradeRequest,
+  ITradeReport,
+  TTradePeriodType
 } from "./types";
 
 class ApiClient {
@@ -103,6 +105,11 @@ class ApiClient {
     return this.request<IApiResponse<null>>(`/portfolios/${portfolioId}/trades/${tradeId}`, {
       method: "DELETE",
     });
+  }
+
+  // Report endpoints
+  async getTradeReport(portfolioId: string, period: TTradePeriodType): Promise<IApiResponse<ITradeReport>> {    
+    return this.request<IApiResponse<ITradeReport>>(`/portfolios/${portfolioId}/trades/report?period=${period}`);
   }
 }
 

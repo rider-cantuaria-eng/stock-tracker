@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "../client";
-import type { ICreateTradeRequest, IUpdateTradeRequest } from "../types";
+import type { ICreateTradeRequest, IUpdateTradeRequest, TTradePeriodType } from "../types";
 
 // Query keys
 export const tradeKeys = {
@@ -9,6 +9,8 @@ export const tradeKeys = {
   list: (portfolioId: string) => [...tradeKeys.lists(), { portfolioId }] as const,
   details: () => [...tradeKeys.all, "detail"] as const,
   detail: (portfolioId: string, tradeId: string) => [...tradeKeys.details(), portfolioId, tradeId] as const,
+  reports: () => [...tradeKeys.all, "reports"] as const,
+  report: (portfolioId: string, period: TTradePeriodType) => [...tradeKeys.all, "report", { portfolioId, period }] as const,
 };
 
 // Trade hooks
@@ -72,5 +74,16 @@ export function useDeleteTrade() {
       // Invalidate the trades list for the portfolio
       queryClient.invalidateQueries({ queryKey: tradeKeys.list(variables.portfolioId) });
     },
+  });
+}
+
+// Trade Report hooks
+export function useTradeReport(portfolioId: string, period: TTradePeriodType) {
+  console.log("useTradeReport", portfolioId, period);
+  return useQuery({
+    queryKey: tradeKeys.report(portfolioId, period),
+    queryFn: () => apiClient.getTradeReport(portfolioId, period),
+    select: (data) => data.data, // Extract only the data from ApiResponse wrapper
+    enabled: !!portfolioId && !!period, // Only execute if both parameters are present
   });
 }

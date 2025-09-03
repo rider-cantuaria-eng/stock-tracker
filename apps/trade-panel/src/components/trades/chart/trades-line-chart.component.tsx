@@ -1,11 +1,13 @@
 "use client";
 
+import { useTradeReport } from "@workspace/api-client/hooks";
+import { TTradePeriodType } from "@workspace/api-client/types";
 import * as echarts from "echarts";
+import { useParams } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 
 import { ILineChartProps } from "./trades-chart.types";
 
-// Dados fictícios para 365 dias
 const generateDummyData = (days: number) => {
 	const data: number[] = [];
 	const labels: string[] = [];
@@ -25,42 +27,17 @@ export function TradesLineChart(props: ILineChartProps) {
 	const chartRef = useRef<HTMLDivElement | null>(null);
 	const [chartInstance, setChartInstance] = useState<echarts.EChartsType | null>(null);
 
-	// Dados completos de 365 dias
-	const fullData = generateDummyData(365);
-
-	console.log(fullData);
+	const { id: portfolioId } = useParams();
+	const report = useTradeReport(portfolioId as string, range as TTradePeriodType);
 
 	const getFilteredData = () => {
-		let days: number;
-
-		switch (range) {
-			case "7d":
-				days = 7;
-				break;
-			case "15d":
-				days = 15;
-				break;
-			case "1m":
-				days = 30;
-				break;
-			case "6m":
-				days = 180;
-				break;
-			case "1y":
-				days = 365;
-				break;
-			case "all":
-				days = fullData.data.length;
-				break;
-			default:
-				days = 30;
-		}
-
 		return {
-			labels: fullData.labels.slice(-days),
-			data: fullData.data.slice(-days),
+			labels: Array.from(report.data?.map(item => item.label) || []),
+			data: Array.from(report.data?.map(item => item.value) || []),
 		};
 	};
+
+	console.log(generateDummyData(7), getFilteredData());
 
 	useEffect(() => {
 		if (chartRef.current) {
@@ -85,7 +62,7 @@ export function TradesLineChart(props: ILineChartProps) {
 			});
 			chartInstance.resize();
 		}
-	}, [range, chartInstance]);
+	}, [range, chartInstance, report.data]);
 
 	useEffect(() => {
 		const resizeChart = () => chartInstance?.resize();
