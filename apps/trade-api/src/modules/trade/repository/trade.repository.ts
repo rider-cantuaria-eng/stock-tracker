@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { PrismaClient, Trade } from "@prisma/client";
 
 import { CreateTradeDto } from "./dto/create-trade.dto";
+import { IPaginatedResult, IPaginationParams } from "../trade.types";
 
 @Injectable()
 export class TradeRepository {
@@ -18,6 +19,57 @@ export class TradeRepository {
       portfolioId,
     );
     return this.prisma.trade.findMany({ where: { portfolioId } });
+  }
+
+  async findAllByPortfolioPaginated(
+    portfolioId: string,
+    params: IPaginationParams = {},
+  ): Promise<IPaginatedResult<Trade>> {
+    const {
+      page = 1,
+      limit = 5,
+      sortBy = "updatedAt",
+      sortOrder = "desc",
+    } = params;
+
+    const skip = (page - 1) * limit;
+
+    console.debug("finding paginated trades on database for portfolio...", {
+      portfolioId,
+      page,
+      limit,
+      sortBy,
+      sortOrder,
+    });
+
+    // Get total count for pagination meta
+    const total = await this.prisma.trade.count({
+      where: { portfolioId },
+    });
+
+    // Get paginated data
+    const data = await this.prisma.trade.findMany({
+      where: { portfolioId },
+      orderBy: { [sortBy]: sortOrder },
+      skip,
+      take: limit,
+    });
+
+    const totalPages = Math.ceil(total / limit);
+    const hasNextPage = page < totalPages;
+    const hasPreviousPage = page > 1;
+
+    return {
+      data,
+      meta: {
+        page,
+        limit,
+        total,
+        totalPages,
+        hasNextPage,
+        hasPreviousPage,
+      },
+    };
   }
 
   async findById(id: string): Promise<Trade | null> {

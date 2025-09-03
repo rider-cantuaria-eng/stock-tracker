@@ -10,10 +10,15 @@ import {
 } from "@nestjs/common";
 import { Trade } from "@prisma/client";
 
-import { TradeService } from "./trade.service";
-import { TradeDto, UpdateTradeDto } from "./repository/dto";
 import { ResponseDto } from "../response.dto";
-import { TTradePeriodType } from "./trade.types";
+
+import { TradeDto, UpdateTradeDto } from "./repository/dto";
+import { TradeService } from "./trade.service";
+import {
+  IPaginationMeta,
+  IPaginationParams,
+  TTradePeriodType,
+} from "./trade.types";
 
 @Controller("portfolios/:portfolioId/trades")
 export class TradeController {
@@ -54,12 +59,32 @@ export class TradeController {
 
   @Get()
   async findAll(@Param("portfolioId") portfolioId: string) {
+    // Default behavior - return all trades
     const { portfolio, trades } =
       await this.tradeService.findAllByPortfolio(portfolioId);
 
     const response = new ResponseDto<Trade[]>({
       message: `Trades for '${portfolio.name}' fetched successfully`,
       data: trades,
+    });
+
+    return response;
+  }
+
+  @Get("/recents")
+  async findAllRecents(
+    @Param("portfolioId") portfolioId: string,
+    @Query("page") page?: string,
+  ) {
+    const result = await this.tradeService.findRecentsByPortfolio(
+      portfolioId,
+      page ? parseInt(page, 10) : 1,
+    );
+
+    const response = new ResponseDto<Trade[]>({
+      message: `Paginated trades for '${result.portfolio.name}' fetched successfully`,
+      data: result.data,
+      pagination: result.meta,
     });
 
     return response;
