@@ -28,6 +28,8 @@ export function TradesLineChart(props: ILineChartProps) {
 	// Dados completos de 365 dias
 	const fullData = generateDummyData(365);
 
+	console.log(fullData);
+
 	const getFilteredData = () => {
 		let days: number;
 
