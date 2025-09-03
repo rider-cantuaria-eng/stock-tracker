@@ -92,7 +92,7 @@ export class TradeService {
     try {
       const paginationParams: IPaginationParams = {
         page,
-        limit: 5,
+        limit: 2,
         sortBy: "updatedAt",
         sortOrder: "desc",
       };

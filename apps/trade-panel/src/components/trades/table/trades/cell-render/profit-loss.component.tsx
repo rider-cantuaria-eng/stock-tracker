@@ -19,7 +19,6 @@ export function ProfitLossCell({ data }: IProfitOrLossRendererProps) {
 	const difference = totalEntry - totalExit;
 	const isLoss = difference > 0;
 
-	console.log(totalEntry, totalExit, difference);
 	const percentage = Math.abs((difference / totalEntry) * 100).toFixed(2);
 
 	return (
