@@ -4,7 +4,7 @@ export interface IEntryPriceRendererProps {
 
 export function PriceCell({ value }: IEntryPriceRendererProps) {
 	return (
-		<span>
+		<span className="text-foreground-secondary">
 			{value.toLocaleString("en-US", {
 				style: "currency",
 				currency: "USD",

@@ -21,7 +21,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FiPlus } from "react-icons/fi";
 
-export function ModalCreatePortoflio() {
+export function CreatePortfolioModal() {
 	const [isOpen, setIsOpen] = useState(false);
 	const createPortfolioMutation = useCreatePortfolio();
 

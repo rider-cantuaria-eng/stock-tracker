@@ -1,98 +1,121 @@
 "use client";
 
-import { AllCommunityModule, ColDef, ModuleRegistry } from "ag-grid-community";
+import { ITrade } from "@workspace/api-client/types";
+import type { ColDef } from "ag-grid-community";
+import { AllCommunityModule, ModuleRegistry } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 import { useMemo, useRef, useState } from "react";
+
+import { DateCell, PairHoldingCell, PnLCell, PriceCell } from "../../cell-render/index";
+import { QuantityCell } from "../../cell-render/quantity.component";
 
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 
-import { DateCell, PairHoldingCell, PnLCell, PriceCell } from "../../cell-render/index";
-
 ModuleRegistry.registerModules([AllCommunityModule]);
-
-export interface ITrade {
-	id: number;
-	ticker: string;
-	entry_price: number;
-	exit_price: number;
-	quantity: number;
-	datetime: string;
-	imagem: {
-		value: string;
-	};
-}
-
-const styleCell = {
-	display: "flex",
-	justifyContent: "start",
-	alignItems: "center",
-	color: "#81818B",
-};
 
 export function useTradesGrid() {
 	const gridRef = useRef<AgGridReact>(null);
 
-	const [rowData, _] = useState<ITrade[]>([
+	const [rowData] = useState<ITrade[]>([
 		{
-			id: 101,
+			id: "101",
 			ticker: "AAPL",
-			entry_price: 150.0,
-			exit_price: 160.0,
+			entryPrice: 150.0,
+			exitPrice: 160.0,
 			quantity: 30,
-			datetime: "2025-09-01T10:30:00Z",
-			imagem: {
-				value:
-					"https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/1200px-Bitcoin.svg.png",
-			},
+			date: "2025-09-01T10:30:00Z",
+			portfolioId: "1",
+			createdAt: "2025-09-01T10:30:00Z",
+			updatedAt: "2025-09-01T10:30:00Z",
 		},
 		{
-			id: 102,
+			id: "102",
 			ticker: "GOOGL",
-			entry_price: 2800.0,
-			exit_price: 2850.0,
+			entryPrice: 2800.0,
+			exitPrice: 2850.0,
 			quantity: 5,
-			datetime: "2025-09-01T14:45:00Z",
-			imagem: {
-				value:
-					"https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/1200px-Bitcoin.svg.png",
-			},
+			date: "2025-09-01T14:45:00Z",
+			portfolioId: "1",
+			createdAt: "2025-09-01T14:45:00Z",
+			updatedAt: "2025-09-01T14:45:00Z",
 		},
 		{
-			id: 103,
+			id: "103",
 			ticker: "TSLA",
-			entry_price: 700.0,
-			exit_price: 750.0,
+			entryPrice: 700.0,
+			exitPrice: 750.0,
 			quantity: 8,
-			datetime: "2025-09-01T12:15:00Z",
-			imagem: {
-				value:
-					"https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/1200px-Bitcoin.svg.png",
-			},
+			date: "2025-09-01T12:15:00Z",
+			portfolioId: "1",
+			createdAt: "2025-09-01T12:15:00Z",
+			updatedAt: "2025-09-01T12:15:00Z",
 		},
 		{
-			id: 104,
+			id: "104",
 			ticker: "BTC",
-			entry_price: 50000.0,
-			exit_price: 52000.0,
+			entryPrice: 50000.0,
+			exitPrice: 52000.0,
 			quantity: 0.5,
-			datetime: "2025-09-02T09:15:00Z",
-			imagem: {
-				value:
-					"https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/1200px-Bitcoin.svg.png",
-			},
+			date: "2025-09-02T09:15:00Z",
+			portfolioId: "1",
+			createdAt: "2025-09-02T09:15:00Z",
+			updatedAt: "2025-09-02T09:15:00Z",
 		},
 		{
-			id: 105,
+			id: "105",
 			ticker: "ETH",
-			entry_price: 3000.0,
-			exit_price: 3200.0,
+			entryPrice: 3000.0,
+			exitPrice: 3200.0,
 			quantity: 2,
-			datetime: "2025-09-02T11:00:00Z",
-			imagem: {
-				value:
-					"https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/1200px-Bitcoin.svg.png",
-			},
+			date: "2025-09-02T11:00:00Z",
+			portfolioId: "1",
+			createdAt: "2025-09-02T11:00:00Z",
+			updatedAt: "2025-09-02T11:00:00Z",
+		},
+		{
+			id: "1043",
+			ticker: "dBTC",
+			entryPrice: 50000.0,
+			exitPrice: 52000.0,
+			quantity: 0.5,
+			date: "2025-09-02T09:15:00Z",
+			portfolioId: "1",
+			createdAt: "2025-09-02T09:15:00Z",
+			updatedAt: "2025-09-02T09:15:00Z",
+		},
+		{
+			id: "1035",
+			ticker: "ETsH",
+			entryPrice: 3000.0,
+			exitPrice: 3200.0,
+			quantity: 2,
+			date: "2025-09-02T11:00:00Z",
+			portfolioId: "1",
+			createdAt: "2025-09-02T11:00:00Z",
+			updatedAt: "2025-09-02T11:00:00Z",
+		},
+		{
+			id: "10352312",
+			ticker: "ETsH",
+			entryPrice: 3000.0,
+			exitPrice: 3200.0,
+			quantity: 2,
+			date: "2025-09-02T11:00:00Z",
+			portfolioId: "1",
+			createdAt: "2025-09-02T11:00:00Z",
+			updatedAt: "2025-09-02T11:00:00Z",
+		},
+		{
+			id: "103512",
+			ticker: "ETsH",
+			entryPrice: 3000.0,
+			exitPrice: 3200.0,
+			quantity: 2,
+			date: "2025-09-02T11:00:00Z",
+			portfolioId: "1",
+			createdAt: "2025-09-02T11:00:00Z",
+			updatedAt: "2025-09-02T11:00:00Z",
 		},
 	]);
 
@@ -102,56 +125,60 @@ export function useTradesGrid() {
 				field: "ticker",
 				headerName: "Ticker",
 				flex: 1,
-				cellStyle: styleCell,
+				minWidth: 200,
 				cellRenderer: PairHoldingCell,
 				cellRendererParams: (params: { data: ITrade }) => ({
 					data: params?.data,
 				}),
 			},
 			{
-				field: "entry_price",
+				field: "entryPrice",
 				headerName: "Entry Price",
 				flex: 1,
-				cellStyle: styleCell,
+				minWidth: 120,
 				cellRenderer: PriceCell,
 				cellRendererParams: (params: { data: ITrade }) => ({
-					value: params.data?.entry_price,
+					value: params.data?.entryPrice,
 				}),
 			},
 			{
-				field: "exit_price",
+				field: "exitPrice",
 				headerName: "Exit Price",
 				flex: 1,
-				cellStyle: styleCell,
+				minWidth: 120,
 				cellRenderer: PriceCell,
 				cellRendererParams: (params: { data: ITrade }) => ({
-					value: params.data?.exit_price,
+					value: params.data?.exitPrice,
 				}),
 			},
 			{
 				field: "quantity",
 				headerName: "Quantity",
 				flex: 1,
-				cellStyle: styleCell,
+				minWidth: 100,
+				cellRenderer: QuantityCell,
+				cellRendererParams: (params: { data: ITrade }) => ({
+					quantity: params.data?.quantity,
+				}),
 			},
 			{
 				field: "quantity",
-				headerName: "Protift / Loss",
+				headerName: "Profit / Loss",
 				flex: 1,
-				cellStyle: styleCell,
+				minWidth: 140,
 				cellRenderer: PnLCell,
 				cellRendererParams: (params: { data: ITrade }) => ({
 					data: params?.data,
 				}),
 			},
 			{
-				field: "datetime",
+				field: "date",
 				headerName: "Date",
 				flex: 1,
-				cellStyle: styleCell,
+				minWidth: 160,
 				cellRenderer: DateCell,
 				cellRendererParams: (params: { data: ITrade }) => ({
-					date: new Date(params.data?.datetime),
+					date: new Date(params.data?.date),
 				}),
 			},
 		],

@@ -5,5 +5,5 @@ export interface IDateRendererProps {
 }
 
 export function DateCell({ date }: IDateRendererProps) {
-	return <span>{formatDate({ date: date })}</span>;
+	return <span className="text-foreground-secondary">{formatDate({ date: date })}</span>;
 }
