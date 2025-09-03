@@ -1,11 +1,11 @@
 import { format } from "date-fns";
 import { parse } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { enUS } from "date-fns/locale";
 
 import { IFormatDate } from "./types";
 
 export function formatDate(dateProps: IFormatDate): string {
-	if (!dateProps?.date) return "";
+	if (!dateProps?.date) return "N/A";
 
 	const dateObj =
 		typeof dateProps.date === "string" ? new Date(dateProps.date) : dateProps.date;
@@ -13,7 +13,7 @@ export function formatDate(dateProps: IFormatDate): string {
 	const defaultFormat = dateProps.hasTime ? "MM/dd/yyyy HH:mm:ss" : "MM/dd/yyyy";
 
 	return format(dateObj, dateProps.format || defaultFormat, {
-		locale: ptBR,
+		locale: enUS,
 	});
 }
 
@@ -41,4 +41,8 @@ export const datetoUTC = (timeStr: string): string => {
 	const today = new Date().toISOString().split("T")[0];
 	const localDate = new Date(`${today}T${timeStr}`);
 	return localDate.toISOString().replace(".000Z", "+00:00");
+};
+
+export const showLocaleDate = (date: Date | string | undefined): string => {
+	return date ? new Date(date).toLocaleString() : "N/A";
 };

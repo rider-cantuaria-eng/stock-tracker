@@ -1,7 +1,7 @@
 "use client";
 
 import { PortfolioForm } from "@/src/forms/portfolio.form";
-import { useCreatePortfolio } from "@workspace/api-client/hooks";
+import { usePortfolio, useUpdatePortfolio } from "@workspace/api-client/hooks";
 import { type PortfolioFormInput } from "@workspace/schemas/portfolio";
 import { Button } from "@workspace/ui/components/button";
 import {
@@ -14,24 +14,42 @@ import {
 	DialogTrigger,
 } from "@workspace/ui/components/dialog";
 import { Spinner } from "@workspace/ui/components/spinner";
+import { useParams } from "next/navigation";
 import { useState } from "react";
-import { FiPlus } from "react-icons/fi";
+import { RiEdit2Line } from "react-icons/ri";
 import { toast } from "sonner";
 
-export function CreatePortfolioModal() {
+export function UpdatePortfolioModal() {
 	const [isOpen, setIsOpen] = useState(false);
-	const createPortfolioMutation = useCreatePortfolio();
+
+	const updatePortfolioMutation = useUpdatePortfolio();
+
+	const { id: portfolioId } = useParams();
+	const portfolio = usePortfolio(portfolioId as string);
+
+	if (portfolio.error) {
+		toast.error("Portfolio not found", {
+			description: "Please select a valid portfolio",
+		});
+		return;
+	}
 
 	const onSubmit = async (data: PortfolioFormInput) => {
 		try {
-			await createPortfolioMutation.mutateAsync(data);
-			setIsOpen(false);
-			toast.success("Portfolio created successfully!", {
-				description: `Portfolio "${data.name}" has been created with initial value of $${data.initialValue}.`,
+			await updatePortfolioMutation.mutateAsync({
+				id: portfolioId as string,
+				data,
 			});
+
+			toast.success("Portfolio updated successfully!", {
+				description: `Portfolio "${data.name}" has been updated.`,
+			});
+
+			setIsOpen(false);
 		} catch (error) {
-			console.error("Error creating portfolio:", error);
-			toast.error("Failed to create portfolio", {
+			console.error("Error updating portfolio:", error);
+
+			toast.error("Failed to update portfolio", {
 				description:
 					error instanceof Error
 						? error.message
@@ -48,27 +66,26 @@ export function CreatePortfolioModal() {
 		<Dialog open={isOpen} onOpenChange={handleOpenChange}>
 			<DialogTrigger asChild>
 				<Button variant="outline" size="lg">
-					<FiPlus />
-					New Portfolio
+					<RiEdit2Line />
+					Edit
 				</Button>
 			</DialogTrigger>
 			<DialogContent className="sm:max-w-[425px]">
 				<DialogHeader>
-					<DialogTitle>Create new Trade Account</DialogTitle>
+					<DialogTitle>Update Trade Account</DialogTitle>
 				</DialogHeader>
-				<PortfolioForm id={"create-portfolio"} onSubmit={onSubmit} />
+				<PortfolioForm
+					id={"update-portfolio"}
+					defaultValues={portfolio.data}
+					onSubmit={onSubmit}
+				/>
 				<DialogFooter>
-					{!createPortfolioMutation.isPending && (
+					{!updatePortfolioMutation.isPending && (
 						<DialogClose asChild>
 							<Button
 								variant="outline"
 								type="button"
-								disabled={createPortfolioMutation.isPending}
-								onClick={() => {
-									toast.success("Portfolio creation cancelled", {
-										description: "You can create a new portfolio later.",
-									});
-								}}
+								disabled={updatePortfolioMutation.isPending}
 							>
 								Cancel
 							</Button>
@@ -76,16 +93,16 @@ export function CreatePortfolioModal() {
 					)}
 					<Button
 						type="submit"
-						form="create-portfolio"
-						disabled={createPortfolioMutation.isPending}
+						form="update-portfolio"
+						disabled={updatePortfolioMutation.isPending}
 					>
-						{createPortfolioMutation.isPending ? (
+						{updatePortfolioMutation.isPending ? (
 							<div className="flex items-center gap-2">
-								<span>Creating Portfolio...</span>
+								<span>Updating Portfolio...</span>
 								<Spinner size="sm" />
 							</div>
 						) : (
-							"Create Portfolio"
+							"Update Portfolio"
 						)}
 					</Button>
 				</DialogFooter>

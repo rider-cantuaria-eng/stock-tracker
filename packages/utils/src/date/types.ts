@@ -1,5 +1,5 @@
 export interface IFormatDate {
-	date: Date | string;
+	date: Date | string | undefined;
 	format?: string;
 	hasTime?: boolean;
 }

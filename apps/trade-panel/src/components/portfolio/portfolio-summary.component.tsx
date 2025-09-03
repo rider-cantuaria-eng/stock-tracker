@@ -1,20 +1,19 @@
 "use client";
 
-import { CardInvestmentInfo } from "@/src/components/card-investment-info";
+import { CardInvestmentInfo } from "@/src/components/cards/card-investimento-info.component";
 import { usePortfolio } from "@workspace/api-client/hooks";
-import { Button } from "@workspace/ui/components/button";
+import { showLocaleDate } from "@workspace/utils/date";
 import { useParams } from "next/navigation";
-import { FaRegEyeSlash } from "react-icons/fa6";
 import { IoMdTime } from "react-icons/io";
 import { IoWalletOutline } from "react-icons/io5";
-import { RiEdit2Line } from "react-icons/ri";
 
 import { CreatePortfolioModal } from "../modal/portfolio/create-portfolio.modal";
+import { UpdatePortfolioModal } from "../modal/portfolio/update-portfolio.modal";
 import { WelcomePortfolioModal } from "../modal/portfolio/welcome.portfolio.modal";
 
 export function PortfolioSummary() {
-	const { id } = useParams();
-	const portfolio = usePortfolio(id as string);
+	const { id: portfolioId } = useParams();
+	const portfolio = usePortfolio(portfolioId as string);
 
 	return (
 		<>
@@ -22,45 +21,31 @@ export function PortfolioSummary() {
 			<section className="!w-full h-fit bg-background-secondary rounded-md p-7 mb-[1.5rem]">
 				<div className="flex items-start lg:items-center justify-between flex-col lg:flex-row">
 					<div>
-						<h2 className="text-xl font-medium">{portfolio.data?.name}</h2>
-						<span className="text-[#81818B] text-sm">
-							Update {portfolio.data?.updatedAt} at {portfolio.data?.updatedAt}
+						<h2 className="text-xl font-medium">{portfolio.data?.name || "Portfolio"}</h2>
+						<span className="text-gray-500 text-sm">
+							Updated {showLocaleDate(portfolio.data?.updatedAt)}
 						</span>
 					</div>
 					<div className="flex gap-[0.5rem] mt-4 lg:mt-0">
-						<Button variant="outline" size="lg">
-							<RiEdit2Line />
-							Edit
-						</Button>
+						{portfolioId && <UpdatePortfolioModal />}
 						<CreatePortfolioModal />
 					</div>
 				</div>
 
 				<div className="flex flex-col items-start  2xl:flex-row  justify-between gap-4 mt-[3rem]">
 					<div>
-						<span className="flex items-center gap-2 text-[#81818B]">
+						<span className="flex items-center gap-2 text-gray-500">
 							<IoWalletOutline />
 							Available Balance
 						</span>
 						<div className="flex items-center mt-4 gap-[3rem]">
-							<h3 className="text-3xl">$32,455.12</h3>
-							<Button size="sm" className="!bg-background !text-[#81818B]">
-								Hide price <FaRegEyeSlash />
-							</Button>
+							<h3 className="text-3xl">
+								$ {portfolio.data?.initialValue.toLocaleString() || "0"}
+							</h3>
 						</div>
 					</div>
 
-					<div className="grid grid-cols-1  md:grid-cols-3 2xl:grid-cols-3 w-full lg:max-w-[800px] gap-[2rem] ">
-						<CardInvestmentInfo
-							title="Total Investment"
-							icon={<IoWalletOutline />}
-							value={3045512}
-						/>
-						<CardInvestmentInfo
-							title="Total Return"
-							icon={<IoWalletOutline />}
-							value={30455}
-						/>
+					<div className="grid grid-cols-1  md:grid-cols-2 2xl:grid-cols-2 w-full lg:max-w-[800px] gap-[2rem] ">
 						<CardInvestmentInfo
 							title="Total Investment"
 							icon={<IoMdTime />}
@@ -68,6 +53,11 @@ export function PortfolioSummary() {
 							increase={{
 								value: "0.2%",
 							}}
+						/>
+						<CardInvestmentInfo
+							title="Total Return"
+							icon={<IoWalletOutline />}
+							value={30455}
 						/>
 					</div>
 				</div>

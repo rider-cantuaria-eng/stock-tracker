@@ -2,6 +2,7 @@ import "@workspace/ui/globals.css";
 import { Header } from "@/src/components/layout/header/header.component";
 import { ThemeProvider } from "@/src/core/context/theme.provider";
 import { QueryClientProviderWrapper } from "@/src/providers/query-client.provider";
+import { Toaster } from "@workspace/ui/components/sonner";
 import { Metadata } from "next";
 import { Golos_Text } from "next/font/google";
 
@@ -24,8 +25,8 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="pt-BR" suppressHydrationWarning>
-			<body className={`${golosTextFonts.variable} antialiased`}>
+		<html lang="en-US" suppressHydrationWarning>
+			<body className={`${golosTextFonts.variable} antialiased`} suppressHydrationWarning>
 				<QueryClientProviderWrapper>
 					<ThemeProvider>
 						<div className="flex flex-col h-full min-h-dvh">
@@ -35,6 +36,7 @@ export default function RootLayout({
 								<Footer />
 							</div>
 						</div>
+						<Toaster />
 					</ThemeProvider>
 				</QueryClientProviderWrapper>
 			</body>

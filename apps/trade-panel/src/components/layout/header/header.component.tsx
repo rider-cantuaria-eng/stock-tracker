@@ -16,6 +16,7 @@ import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { IoIosArrowDown } from "react-icons/io";
 
+import { NoSSR } from "../../ui/no-ssr";
 import { HeaderMobile } from "./header-mobile.component";
 
 export function Header() {
@@ -76,20 +77,22 @@ export function Header() {
 						</DropdownMenuContent>
 					</DropdownMenu>
 
-					<Button
-						variant="outline"
-						onClick={() => {
-							if (theme === "dark") setTheme("light");
-							if (theme === "light") setTheme("dark");
-						}}
-						size="icon"
-					>
-						{theme === "dark" ? (
-							<Sun className="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 transition-all dark:-rotate-90" />
-						) : (
-							<Moon className="absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
-						)}
-					</Button>
+					<NoSSR>
+						<Button
+							variant="outline"
+							onClick={() => {
+								if (theme === "dark") setTheme("light");
+								if (theme === "light") setTheme("dark");
+							}}
+							size="icon"
+						>
+							{theme === "dark" ? (
+								<Sun className="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 transition-all dark:-rotate-90" />
+							) : (
+								<Moon className="absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
+							)}
+						</Button>
+					</NoSSR>
 				</div>
 			</div>
 		</header>
