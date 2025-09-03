@@ -49,7 +49,7 @@ export function CreatePortfolioModal() {
 			<DialogTrigger asChild>
 				<Button variant="outline" size="lg">
 					<FiPlus />
-					New Portfolio
+					Create New Portfolio
 				</Button>
 			</DialogTrigger>
 			<DialogContent className="sm:max-w-[425px]">

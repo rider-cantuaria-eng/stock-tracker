@@ -25,58 +25,58 @@ services:
       retries: 5
 
   # Trade API
-  trade-api:
-    build:
-      context: .
-      dockerfile: apps/trade-api/Dockerfile
-      args:
-        - NODE_ENV=production
-    container_name: trading-api
-    restart: unless-stopped
-    environment:
-      NODE_ENV: production
-      PORT: 3001
-      DATABASE_URL: postgresql://trading_user:trading_password@postgres:5432/trading_db?schema=public
-    ports:
-      - "3001:3001"
-    networks:
-      - trading-network
-    depends_on:
-      postgres:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3001", "||", "exit", "1"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
+  # trade-api:
+  #   build:
+  #     context: .
+  #     dockerfile: apps/trade-api/Dockerfile
+  #     args:
+  #       - NODE_ENV=production
+  #   container_name: trading-api
+  #   restart: unless-stopped
+  #   environment:
+  #     NODE_ENV: production
+  #     PORT: 3001
+  #     DATABASE_URL: postgresql://trading_user:trading_password@postgres:5432/trading_db?schema=public
+  #   ports:
+  #     - "3001:3001"
+  #   networks:
+  #     - trading-network
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #   healthcheck:
+  #     test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3001", "||", "exit", "1"]
+  #     interval: 30s
+  #     timeout: 10s
+  #     retries: 3
+  #     start_period: 40s
 
   # Trade Panel (Frontend)
-  trade-panel:
-    build:
-      context: .
-      dockerfile: apps/trade-panel/Dockerfile
-      args:
-        - NODE_ENV=production
-    container_name: trading-panel
-    restart: unless-stopped
-    environment:
-      NODE_ENV: production
-      PORT: 3000
-      NEXT_PUBLIC_API_URL: http://localhost:3001
-    ports:
-      - "3000:3000"
-    networks:
-      - trading-network
-    depends_on:
-      trade-api:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000", "||", "exit", "1"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
+  # trade-panel:
+  #   build:
+  #     context: .
+  #     dockerfile: apps/trade-panel/Dockerfile
+  #     args:
+  #       - NODE_ENV=production
+  #   container_name: trading-panel
+  #   restart: unless-stopped
+  #   environment:
+  #     NODE_ENV: production
+  #     PORT: 3000
+  #     NEXT_PUBLIC_API_URL: http://localhost:3001
+  #   ports:
+  #     - "3000:3000"
+  #   networks:
+  #     - trading-network
+  #   depends_on:
+  #     trade-api:
+  #       condition: service_healthy
+  #   healthcheck:
+  #     test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000", "||", "exit", "1"]
+  #     interval: 30s
+  #     timeout: 10s
+  #     retries: 3
+  #     start_period: 40s
 
   # pgAdmin (opcional - para interface gráfica do PostgreSQL)
   pgadmin:

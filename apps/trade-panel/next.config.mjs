@@ -11,12 +11,6 @@ const nextConfig = {
 			},
 		],
 	},
-	// Enable standalone output for Docker
-	output: "standalone",
-	// Experimental features for better performance
-	experimental: {
-		outputFileTracingRoot: process.cwd(),
-	},
 };
 
 export default nextConfig;

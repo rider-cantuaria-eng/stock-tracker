@@ -10,6 +10,8 @@ import {
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
+import { CreatePortfolioModal } from "./create-portfolio.modal";
+
 interface ISelectPortfolioModalProps {
 	portfolios: IPortfolio[];
 }
@@ -78,7 +80,7 @@ export function SelectPortfolioModal(props: ISelectPortfolioModalProps) {
 				</div>
 				<DialogFooter className="flex flex-col items-center gap-2 mt-10">
 					<span className="text-sm text-gray-500">or</span>
-					<Button type="button">Create New Portfolio</Button>
+					<CreatePortfolioModal />
 				</DialogFooter>
 			</DialogContent>
 		</Dialog>

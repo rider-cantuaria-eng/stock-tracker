@@ -1,4 +1,3 @@
-import { Button } from "@workspace/ui/components/button";
 import {
 	Dialog,
 	DialogContent,
@@ -7,6 +6,8 @@ import {
 	DialogTitle,
 } from "@workspace/ui/components/dialog";
 import Image from "next/image";
+
+import { CreatePortfolioModal } from "./create-portfolio.modal";
 
 export function EmptyPortfolioModal() {
 	const handleOpenChange = () => {
@@ -39,7 +40,7 @@ export function EmptyPortfolioModal() {
 					</div>
 				</div>
 				<DialogFooter className="flex flex-col items-center gap-2 mt-10">
-					<Button type="button">Create New Portfolio</Button>
+					<CreatePortfolioModal />
 				</DialogFooter>
 			</DialogContent>
 		</Dialog>
