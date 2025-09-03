@@ -13,9 +13,14 @@ export function ProfitLossCell({ data }: IProfitOrLossRendererProps) {
 		return <SkeletonCell />;
 	}
 
-	const difference = data.entryPrice - data.exitPrice;
+	const totalEntry = data.entryPrice * data.quantity;
+	const totalExit = data.exitPrice * data.quantity;
+
+	const difference = totalEntry - totalExit;
 	const isLoss = difference > 0;
-	const percentage = Math.abs((difference / data.entryPrice) * 100).toFixed(2);
+
+	console.log(totalEntry, totalExit, difference);
+	const percentage = Math.abs((difference / totalEntry) * 100).toFixed(2);
 
 	return (
 		<div className="flex flex-col leading-none">
