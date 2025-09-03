@@ -39,8 +39,9 @@ export function useCreateTrade() {
     mutationFn: ({ portfolioId, data }: { portfolioId: string; data: ICreateTradeRequest }) => 
       apiClient.createTrade(portfolioId, data),
     onSuccess: (_, variables) => {
-      // Invalidate the trades list for the specific portfolio
+      // Invalidate the trades list for the specific portfolio and report
       queryClient.invalidateQueries({ queryKey: tradeKeys.list(variables.portfolioId) });
+      queryClient.invalidateQueries({ queryKey: tradeKeys.report(variables.portfolioId, "7d") });
     },
   });
 }
@@ -60,6 +61,7 @@ export function useUpdateTrade() {
       queryClient.invalidateQueries({ 
         queryKey: tradeKeys.detail(variables.portfolioId, variables.tradeId) 
       });
+      queryClient.invalidateQueries({ queryKey: tradeKeys.report(variables.portfolioId, "7d") });
     },
   });
 }
