@@ -18,6 +18,7 @@ import {
   IPaginationMeta,
   IPaginationParams,
   TTradePeriodType,
+  IPortfolioBalance,
 } from "./trade.types";
 
 @Controller("portfolios/:portfolioId/trades")
@@ -52,6 +53,18 @@ export class TradeController {
     const response = new ResponseDto<any>({
       message: `Report for portfolio fetched successfully`,
       data: report,
+    });
+
+    return response;
+  }
+
+  @Get("/balance")
+  async getBalance(@Param("portfolioId") portfolioId: string) {
+    const balance = await this.tradeService.getPortfolioBalance(portfolioId);
+
+    const response = new ResponseDto<IPortfolioBalance>({
+      message: `Balance for portfolio '${balance.portfolioName}' calculated successfully`,
+      data: balance,
     });
 
     return response;

@@ -4,8 +4,17 @@ import { TradeDto } from "./repository/dto";
 import { TradeRepository } from "./repository/trade.repository";
 import { PortfolioService } from "../portfolio/portfolio.service";
 import { ServiceErrorException } from "src/exceptions/service-error.exception";
-import { IPaginationParams, TTradePeriodType } from "./trade.types";
-import { calculateProfitLossByDate } from "./trade.helper";
+import {
+  IPaginationParams,
+  TTradePeriodType,
+  IPortfolioBalance,
+} from "./trade.types";
+import {
+  calculatePortfolioBalance,
+  calculateProfitLoss,
+  calculateProfitLossByDate,
+  calculateProfitLossPercentage,
+} from "./trade.helper";
 
 @Injectable()
 export class TradeService {
@@ -242,6 +251,39 @@ export class TradeService {
 
       throw new ServiceErrorException(
         `Error fetching trades report for portfolio ${portfolioId}`,
+      );
+    }
+  }
+
+  // Balance AREA
+  async getPortfolioBalance(portfolioId: string): Promise<IPortfolioBalance> {
+    try {
+      const { portfolio, trades } = await this.findAllByPortfolio(portfolioId);
+
+      console.debug("calculating portfolio balance...");
+
+      const balance: IPortfolioBalance = {
+        portfolioId: portfolio.id,
+        portfolioName: portfolio.name,
+        initialValue: portfolio.initialValue,
+        totalTradesValue: calculatePortfolioBalance(trades),
+        totalTrades: trades.length,
+        profitLoss: calculateProfitLoss(trades),
+        profitLossPercentage: calculateProfitLossPercentage(trades),
+      };
+
+      console.debug("portfolio balance calculated...", balance);
+
+      return balance;
+    } catch (error) {
+      console.error(error);
+
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+
+      throw new ServiceErrorException(
+        `Error calculating balance for portfolio ${portfolioId}`,
       );
     }
   }
