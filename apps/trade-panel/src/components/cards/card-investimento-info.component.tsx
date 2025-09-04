@@ -1,11 +1,32 @@
 import { cn } from "@workspace/ui/lib/utils";
-import { IoIosTrendingUp } from "react-icons/io";
+import { IoIosTrendingDown, IoIosTrendingUp } from "react-icons/io";
 
 import { NoSSR } from "../layout/no-ssr.component";
-import { ICardInvestmentInfoProps } from "./types";
+
+export interface ICardInvestmentInfoProps {
+	title: string;
+	icon?: React.ReactNode;
+	value?: number;
+	percentage?: {
+		className?: string;
+		value: number;
+	};
+	className?: string;
+	isLoading?: boolean;
+}
 
 export function CardInvestmentInfo(props: ICardInvestmentInfoProps) {
-	const { title, className, icon, value, increase, isLoading } = props;
+	const {
+		title,
+		className,
+		icon,
+		value,
+		percentage = {
+			className: "",
+			value: 0,
+		},
+		isLoading,
+	} = props;
 
 	return (
 		<div
@@ -28,9 +49,14 @@ export function CardInvestmentInfo(props: ICardInvestmentInfoProps) {
 							currency: "USD",
 						})}
 					</NoSSR>
-					{increase && (
-						<span className="flex items-center text-sm font-medium text-[#19A173] gap-[0.2rem]">
-							+2% <IoIosTrendingUp />
+					{percentage?.value > 0 && (
+						<span className="flex items-center text-sm font-medium text-green-700 gap-[0.2rem]">
+							{percentage?.value.toFixed(2).toLocaleString()} <IoIosTrendingUp />
+						</span>
+					)}
+					{percentage?.value < 0 && (
+						<span className="flex items-center text-sm font-medium text-red-700 gap-[0.2rem]">
+							{percentage?.value.toFixed(2).toLocaleString()} <IoIosTrendingDown />
 						</span>
 					)}
 				</h4>

@@ -4,13 +4,12 @@ import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuGroup,
-	DropdownMenuItem,
 	DropdownMenuLabel,
-	DropdownMenuShortcut,
 	DropdownMenuTrigger,
 } from "@workspace/ui/components/dropdown-menu";
-import { usePathname, useRouter } from "next/navigation";
 import { IoIosArrowDown } from "react-icons/io";
+
+import { PortfolioDropdownItem } from "./portfolio-dropdown-item.component";
 
 interface IListPortfolioProps {
 	title: string;
@@ -20,17 +19,11 @@ interface IListPortfolioProps {
 
 export function DropdownPortfolio(props: IListPortfolioProps) {
 	const { title, portfolios, isLoading } = props;
-	const pathname = usePathname();
-	const router = useRouter();
 
 	if (isLoading) return <div className="h-4 w-32 bg-foreground/20 rounded mx-3" />;
 
 	if (portfolios?.length <= 0)
 		return <span className="text-sm px-2">No portfolios found.</span>;
-
-	const handleToPortfolio = (id: string) => {
-		return router.push(`/portfolio/${id}`);
-	};
 
 	return (
 		<DropdownMenu>
@@ -45,16 +38,7 @@ export function DropdownPortfolio(props: IListPortfolioProps) {
 
 				<DropdownMenuGroup>
 					{portfolios?.map(portfolio => (
-						<DropdownMenuItem
-							key={portfolio?.id}
-							className={`${pathname === `/portfolio/${portfolio?.id}` && "text-blue-400"} cursor-pointer`}
-							onClick={() => handleToPortfolio(portfolio.id)}
-						>
-							{portfolio?.name}
-							<DropdownMenuShortcut>
-								${portfolio?.initialValue.toLocaleString()}
-							</DropdownMenuShortcut>
-						</DropdownMenuItem>
+						<PortfolioDropdownItem key={portfolio?.id} portfolio={portfolio} />
 					))}
 				</DropdownMenuGroup>
 			</DropdownMenuContent>

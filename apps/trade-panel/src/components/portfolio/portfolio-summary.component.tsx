@@ -1,11 +1,10 @@
 "use client";
 
 import { CardInvestmentInfo } from "@/src/components/cards/card-investimento-info.component";
-import { usePortfolio } from "@workspace/api-client/hooks";
+import { usePortfolio, usePortfolioBalance } from "@workspace/api-client/hooks";
 import { showLocaleDate } from "@workspace/utils/date";
 import { useParams } from "next/navigation";
-import { IoMdTime } from "react-icons/io";
-import { IoWalletOutline } from "react-icons/io5";
+import { IoCashOutline, IoCashSharp, IoWalletOutline } from "react-icons/io5";
 
 import { NotFoundModal } from "../modal/not-found.modal";
 import { CreatePortfolioModal } from "../modal/portfolio/create-portfolio.modal";
@@ -16,6 +15,12 @@ import { PortfolioSummarySkeleton } from "./portfolio-summary.skeleton";
 export function PortfolioSummary() {
 	const { id: portfolioId } = useParams();
 	const portfolio = usePortfolio(portfolioId as string);
+	const balance = usePortfolioBalance(portfolioId as string);
+
+	/**
+	 * @author Ríder Cantuária
+	 * @todo Handle not found portfolio by other way
+	 */
 	if (portfolio.isError && portfolioId)
 		return (
 			<NotFoundModal
@@ -24,15 +29,20 @@ export function PortfolioSummary() {
 			/>
 		);
 
-	if (portfolio.isLoading) return <PortfolioSummarySkeleton />;
+	if (portfolio.isLoading) {
+		return <PortfolioSummarySkeleton />;
+	}
 
-	if (!portfolio.data && portfolioId)
+	if (!portfolio.data && portfolioId) {
 		return (
 			<NotFoundModal
 				title="Where my Portfolio?"
 				description="It appears that the portfolio you are looking for is not found. You can create a new one to start tracking your investments and trades."
 			/>
 		);
+	}
+	/*eof @todo Handle not found portfolio by other way */
+
 	return (
 		<>
 			<WelcomePortfolioModal />
@@ -54,28 +64,35 @@ export function PortfolioSummary() {
 					<div>
 						<span className="flex items-center gap-2 text-gray-500">
 							<IoWalletOutline />
-							Available Balance
+							Initial Value
 						</span>
 						<div className="flex items-center mt-4 gap-[3rem]">
 							<h3 className="text-3xl">
-								$ {portfolio.data?.initialValue.toLocaleString() || "0"}
+								$ {balance.data?.initialValue.toLocaleString() || "0"}
 							</h3>
 						</div>
 					</div>
 
-					<div className="grid grid-cols-1  md:grid-cols-2 2xl:grid-cols-2 w-full lg:max-w-[800px] gap-[2rem] ">
+					<div className="grid grid-cols-1  md:grid-cols-3 2xl:grid-cols-2 w-full lg:max-w-[800px] gap-[2rem] ">
 						<CardInvestmentInfo
-							title="Total Investment"
-							icon={<IoMdTime />}
-							value={3045512}
-							increase={{
-								value: "0.2%",
+							title="Initial Investment"
+							icon={<IoCashOutline />}
+							value={
+								(balance.data?.totalTradesValue ?? 0) - (balance.data?.profitLoss ?? 0)
+							}
+						/>
+						<CardInvestmentInfo
+							title="Current Balance"
+							icon={<IoCashSharp />}
+							value={balance.data?.totalTradesValue ?? 0}
+							percentage={{
+								value: balance.data?.profitLossPercentage ?? 0,
 							}}
 						/>
 						<CardInvestmentInfo
 							title="Total Return"
 							icon={<IoWalletOutline />}
-							value={30455}
+							value={balance.data?.profitLoss ?? 0}
 						/>
 					</div>
 				</div>

@@ -9,7 +9,8 @@ import type {
   IUpdateTradeRequest,
   ITradeReport,
   TTradePeriodType,
-  IPaginatedApiResponse
+  IPaginatedApiResponse,
+  IPortfolioBalance
 } from "./types";
 
 class ApiClient {
@@ -116,6 +117,11 @@ class ApiClient {
   // Report endpoints
   async getTradeReport(portfolioId: string, period: TTradePeriodType): Promise<IApiResponse<ITradeReport>> {    
     return this.request<IApiResponse<ITradeReport>>(`/portfolios/${portfolioId}/trades/report?period=${period}`);
+  }
+
+  // Balance endpoints
+  async getPortfolioBalance(portfolioId: string): Promise<IApiResponse<IPortfolioBalance>> {
+    return this.request<IApiResponse<IPortfolioBalance>>(`/portfolios/${portfolioId}/trades/balance`);
   }
 }
 

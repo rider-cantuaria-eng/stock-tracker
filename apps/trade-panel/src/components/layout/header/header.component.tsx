@@ -7,9 +7,9 @@ import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useParams } from "next/navigation";
 
+import { DropdownPortfolio } from "../../portfolio/portfolio-dropdown.component";
 import { AppLogo } from "../app-logo.component";
 import { NoSSR } from "../no-ssr.component";
-import { DropdownPortfolio } from "../portfolio-dropdown.component";
 import { HeaderMobile } from "./header-mobile.component";
 
 export function Header() {
@@ -36,7 +36,7 @@ export function Header() {
 				<div className="flex items-center">
 					<b>Portfolio</b>:
 					<DropdownPortfolio
-						title={`${portfolio.data?.name} • $${portfolio.data?.initialValue.toLocaleString()}`}
+						title={`${portfolio.data?.name}`}
 						portfolios={portfolios?.data ?? []}
 						isLoading={portfolios?.isLoading || portfolio?.isLoading}
 					/>

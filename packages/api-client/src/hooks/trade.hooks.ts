@@ -13,6 +13,8 @@ export const tradeKeys = {
   detail: (portfolioId: string, tradeId: string) => [...tradeKeys.details(), portfolioId, tradeId] as const,
   reports: () => [...tradeKeys.all, "reports"] as const,
   report: (portfolioId: string, period: TTradePeriodType) => [...tradeKeys.all, "report", { portfolioId, period }] as const,
+  balances: () => [...tradeKeys.all, "balances"] as const,
+  balance: (portfolioId: string) => [...tradeKeys.balances(), { portfolioId }] as const,
 };
 
 // Trade hooks
@@ -57,6 +59,7 @@ export function useCreateTrade() {
       queryClient.invalidateQueries({ queryKey: tradeKeys.list(variables.portfolioId) });
       queryClient.invalidateQueries({ queryKey: tradeKeys.recents() });
       queryClient.invalidateQueries({ queryKey: tradeKeys.report(variables.portfolioId, "7d") });
+      queryClient.invalidateQueries({ queryKey: tradeKeys.balance(variables.portfolioId) });
     },
   });
 }
@@ -78,6 +81,7 @@ export function useUpdateTrade() {
       });
       queryClient.invalidateQueries({ queryKey: tradeKeys.recents() });
       queryClient.invalidateQueries({ queryKey: tradeKeys.report(variables.portfolioId, "7d") });
+      queryClient.invalidateQueries({ queryKey: tradeKeys.balance(variables.portfolioId) });
     },
   });
 }
@@ -92,6 +96,7 @@ export function useDeleteTrade() {
       // Invalidate the trades list for the portfolio
       queryClient.invalidateQueries({ queryKey: tradeKeys.list(variables.portfolioId) });
       queryClient.invalidateQueries({ queryKey: tradeKeys.recents() });
+      queryClient.invalidateQueries({ queryKey: tradeKeys.balance(variables.portfolioId) });
     },
   });
 }
@@ -103,5 +108,15 @@ export function useTradeReport(portfolioId: string, period: TTradePeriodType) {
     queryFn: () => apiClient.getTradeReport(portfolioId, period),
     select: (data) => data.data, // Extract only the data from ApiResponse wrapper
     enabled: !!portfolioId && !!period, // Only execute if both parameters are present
+  });
+}
+
+// Portfolio Balance hooks
+export function usePortfolioBalance(portfolioId: string) {
+  return useQuery({
+    queryKey: tradeKeys.balance(portfolioId),
+    queryFn: () => apiClient.getPortfolioBalance(portfolioId),
+    select: (data) => data.data, // Extract only the data from ApiResponse wrapper
+    enabled: !!portfolioId, // Only execute if portfolioId is present
   });
 }

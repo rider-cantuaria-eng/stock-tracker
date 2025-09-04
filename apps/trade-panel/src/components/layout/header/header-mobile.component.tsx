@@ -14,7 +14,7 @@ import { useParams } from "next/navigation";
 import { TradesChart } from "../../trades/chart/trades-chart.component";
 import { RecentsTrades } from "../../trades/recents-trades/recent-trades.component";
 import { AppLogo } from "../app-logo.component";
-import { DropdownPortfolio } from "../portfolio-dropdown.component";
+import { DropdownPortfolio } from "../../portfolio/portfolio-dropdown.component";
 
 export function HeaderMobile() {
 	const { id: portfolioId } = useParams();

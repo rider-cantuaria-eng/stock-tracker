@@ -1,4 +1,4 @@
-import { IoMdTime } from "react-icons/io";
+import { IoCashOutline, IoCashSharp, IoWalletOutline } from "react-icons/io5";
 
 import { CardInvestmentInfo } from "../cards/card-investimento-info.component";
 
@@ -26,22 +26,31 @@ export function PortfolioSummarySkeleton() {
 					</div>
 				</div>
 
-				<div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-2 w-full lg:max-w-[800px] gap-[2rem]">
+				<div className="grid grid-cols-1  md:grid-cols-3 2xl:grid-cols-2 w-full lg:max-w-[800px] gap-[2rem]">
 					<CardInvestmentInfo
-						title="Total Investment"
-						icon={<IoMdTime />}
+						title="Initial Investment"
+						icon={<IoCashOutline />}
 						value={3045512}
-						increase={{
-							value: "0.2%",
+						percentage={{
+							value: 0.2,
 						}}
 						isLoading={true}
 					/>
 					<CardInvestmentInfo
-						title="Total Investment"
-						icon={<IoMdTime />}
+						title="Current Balance"
+						icon={<IoCashSharp />}
 						value={3045512}
-						increase={{
-							value: "0.2%",
+						percentage={{
+							value: 0.2,
+						}}
+						isLoading={true}
+					/>
+					<CardInvestmentInfo
+						title="Total Return"
+						icon={<IoWalletOutline />}
+						value={3045512}
+						percentage={{
+							value: 0.2,
 						}}
 						isLoading={true}
 					/>
