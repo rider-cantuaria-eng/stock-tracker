@@ -7,6 +7,7 @@ import { useParams } from "next/navigation";
 import { IoMdTime } from "react-icons/io";
 import { IoWalletOutline } from "react-icons/io5";
 
+import { NotFoundModal } from "../modal/not-found.modal";
 import { CreatePortfolioModal } from "../modal/portfolio/create-portfolio.modal";
 import { UpdatePortfolioModal } from "../modal/portfolio/update-portfolio.modal";
 import { WelcomePortfolioModal } from "../modal/portfolio/welcome.portfolio.modal";
@@ -15,9 +16,23 @@ import { PortfolioSummarySkeleton } from "./portfolio-summary.skeleton";
 export function PortfolioSummary() {
 	const { id: portfolioId } = useParams();
 	const portfolio = usePortfolio(portfolioId as string);
+	if (portfolio.isError && portfolioId)
+		return (
+			<NotFoundModal
+				title="Where my Portfolio?"
+				description="It appears that the portfolio you are looking for is not found. You can create a new one to start tracking your investments and trades."
+			/>
+		);
 
 	if (portfolio.isLoading) return <PortfolioSummarySkeleton />;
 
+	if (!portfolio.data && portfolioId)
+		return (
+			<NotFoundModal
+				title="Where my Portfolio?"
+				description="It appears that the portfolio you are looking for is not found. You can create a new one to start tracking your investments and trades."
+			/>
+		);
 	return (
 		<>
 			<WelcomePortfolioModal />
