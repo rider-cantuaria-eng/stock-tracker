@@ -7,6 +7,8 @@ export const tradeKeys = {
   all: ["trades"] as const,
   lists: () => [...tradeKeys.all, "list"] as const,
   list: (portfolioId: string) => [...tradeKeys.lists(), { portfolioId }] as const,
+  recents: () => [...tradeKeys.all, "recents"] as const,
+  recent: (portfolioId: string, page?: number) => [...tradeKeys.recents(), { portfolioId, page }] as const,
   details: () => [...tradeKeys.all, "detail"] as const,
   detail: (portfolioId: string, tradeId: string) => [...tradeKeys.details(), portfolioId, tradeId] as const,
   reports: () => [...tradeKeys.all, "reports"] as const,
@@ -32,6 +34,18 @@ export function useTrade(portfolioId: string, tradeId: string) {
   });
 }
 
+export function useRecentTrades(portfolioId: string, page?: number) {
+  return useQuery({
+    queryKey: tradeKeys.recent(portfolioId, page),
+    queryFn: () => apiClient.getRecentTrades(portfolioId, page),
+    select: (data) => ({
+      trades: data.data,
+      pagination: data.pagination,
+    }),
+    enabled: !!portfolioId, // Only execute if portfolioId is present
+  });
+}
+
 export function useCreateTrade() {
   const queryClient = useQueryClient();
 
@@ -41,6 +55,7 @@ export function useCreateTrade() {
     onSuccess: (_, variables) => {
       // Invalidate the trades list for the specific portfolio and report
       queryClient.invalidateQueries({ queryKey: tradeKeys.list(variables.portfolioId) });
+      queryClient.invalidateQueries({ queryKey: tradeKeys.recents() });
       queryClient.invalidateQueries({ queryKey: tradeKeys.report(variables.portfolioId, "7d") });
     },
   });
@@ -61,6 +76,7 @@ export function useUpdateTrade() {
       queryClient.invalidateQueries({ 
         queryKey: tradeKeys.detail(variables.portfolioId, variables.tradeId) 
       });
+      queryClient.invalidateQueries({ queryKey: tradeKeys.recents() });
       queryClient.invalidateQueries({ queryKey: tradeKeys.report(variables.portfolioId, "7d") });
     },
   });
@@ -75,6 +91,7 @@ export function useDeleteTrade() {
     onSuccess: (_, variables) => {
       // Invalidate the trades list for the portfolio
       queryClient.invalidateQueries({ queryKey: tradeKeys.list(variables.portfolioId) });
+      queryClient.invalidateQueries({ queryKey: tradeKeys.recents() });
     },
   });
 }

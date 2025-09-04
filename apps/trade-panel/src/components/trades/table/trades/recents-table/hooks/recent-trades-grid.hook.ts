@@ -1,6 +1,6 @@
 "use client";
 
-import { useTrades } from "@workspace/api-client/hooks";
+import { useRecentTrades } from "@workspace/api-client/hooks";
 import { ITrade } from "@workspace/api-client/types";
 import { AllCommunityModule, ColDef, ModuleRegistry } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
@@ -13,7 +13,7 @@ import "ag-grid-community/styles/ag-theme-quartz.css";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
-export function UseRecentsTradeGrid(portfolioId: string) {
+export function UseRecentsTradeGrid(portfolioId: string, page: number = 1) {
 	const gridRef = useRef<AgGridReact>(null);
 	const rowDataLoading = useState(
 		Array(5).fill({
@@ -29,7 +29,7 @@ export function UseRecentsTradeGrid(portfolioId: string) {
 		}),
 	);
 
-	const trades = useTrades(portfolioId);
+	const recents = useRecentTrades(portfolioId, page);
 
 	const colDefs = useMemo<ColDef<ITrade>[]>(
 		() => [
@@ -57,8 +57,10 @@ export function UseRecentsTradeGrid(portfolioId: string) {
 
 	return {
 		colDefs,
-		rowData: trades.data,
-		loading: trades.isLoading,
+		rowData: recents.data?.trades,
+		pagination: recents.data?.pagination,
+		loading: recents.isLoading,
+		isFetching: recents.isFetching,
 		gridRef,
 		rowDataLoading,
 	};

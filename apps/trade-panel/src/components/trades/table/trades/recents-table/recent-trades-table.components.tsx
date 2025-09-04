@@ -6,17 +6,37 @@ import { cn } from "@workspace/ui/lib/utils";
 import { AgGridReact } from "ag-grid-react";
 import { useTheme } from "next-themes";
 import { useParams } from "next/navigation";
+import { useState, useEffect } from "react";
 
 import { UseRecentsTradeGrid } from "./hooks/recent-trades-grid.hook";
 
 import "../trades-table.style.css";
 
 export function RecentsTradeTable() {
+	const [page, setPage] = useState(1);
 	const { id: portfolioId } = useParams();
-	const { colDefs, gridRef, rowData, rowDataLoading, loading } = UseRecentsTradeGrid(
-		portfolioId as string,
-	);
+	const { colDefs, gridRef, rowData, rowDataLoading, loading, pagination } =
+		UseRecentsTradeGrid(portfolioId as string, page);
 	const { theme } = useTheme();
+
+	// Refresh when fetch occurs
+	useEffect(() => {
+		if (gridRef.current && !loading) {
+			gridRef.current.api.refreshCells();
+		}
+	}, [rowData, loading]);
+
+	const handleNextPage = () => {
+		if (pagination?.hasNextPage) {
+			setPage(prevPage => prevPage + 1);
+		}
+	};
+
+	const handlePreviousPage = () => {
+		if (pagination?.hasPreviousPage) {
+			setPage(prevPage => prevPage - 1);
+		}
+	};
 
 	return (
 		<NoSSR>
@@ -51,9 +71,23 @@ export function RecentsTradeTable() {
 					/>{" "}
 				</div>
 
-				<Button className="w-full !text-foreground-secondary !bg-background mt-16">
-					Show more
-				</Button>
+				<div className="flex justify-center items-center mt-16 gap-4">
+					<Button
+						className="flex-1 !text-foreground-secondary !bg-background"
+						onClick={handlePreviousPage}
+						disabled={loading || !pagination?.hasPreviousPage}
+					>
+						Previous
+					</Button>
+					<span className="text-foreground-secondary">Page {page}</span>
+					<Button
+						className="flex-1 !text-foreground-secondary !bg-background"
+						onClick={handleNextPage}
+						disabled={loading || !pagination?.hasNextPage}
+					>
+						Next
+					</Button>
+				</div>
 			</div>
 		</NoSSR>
 	);
