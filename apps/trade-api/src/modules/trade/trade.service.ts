@@ -9,7 +9,12 @@ import {
   TTradePeriodType,
   IPortfolioBalance,
 } from "./trade.types";
-import { calculateProfitLossByDate } from "./trade.helper";
+import {
+  calculatePortfolioBalance,
+  calculateProfitLoss,
+  calculateProfitLossByDate,
+  calculateProfitLossPercentage,
+} from "./trade.helper";
 
 @Injectable()
 export class TradeService {
@@ -257,33 +262,14 @@ export class TradeService {
 
       console.debug("calculating portfolio balance...");
 
-      // Calculate total trades value
-      // If trade has exitPrice, use exitPrice * quantity
-      // If trade doesn't have exitPrice, use entryPrice * quantity (open position)
-      const totalTradesValue = trades.reduce((total, trade) => {
-        const price = trade.exitPrice || trade.entryPrice;
-        return total + price * trade.quantity;
-      }, 0);
-
-      // Profit/Loss = total trades value - (entry prices * quantities)
-      const totalCost = trades.reduce((total, trade) => {
-        return total + trade.entryPrice * trade.quantity;
-      }, 0);
-
-      const profitLoss = totalTradesValue - totalCost;
-
-      // Profit/Loss percentage based on total cost
-      const profitLossPercentage =
-        totalCost > 0 ? (profitLoss / totalCost) * 100 : 0;
-
       const balance: IPortfolioBalance = {
         portfolioId: portfolio.id,
         portfolioName: portfolio.name,
         initialValue: portfolio.initialValue,
-        totalTradesValue,
+        totalTradesValue: calculatePortfolioBalance(trades),
         totalTrades: trades.length,
-        profitLoss,
-        profitLossPercentage,
+        profitLoss: calculateProfitLoss(trades),
+        profitLossPercentage: calculateProfitLossPercentage(trades),
       };
 
       console.debug("portfolio balance calculated...", balance);

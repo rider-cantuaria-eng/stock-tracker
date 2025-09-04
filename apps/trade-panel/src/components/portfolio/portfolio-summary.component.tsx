@@ -6,6 +6,7 @@ import { showLocaleDate } from "@workspace/utils/date";
 import { useParams } from "next/navigation";
 import { IoCashOutline, IoCashSharp, IoWalletOutline } from "react-icons/io5";
 
+import { NotFoundModal } from "../modal/not-found.modal";
 import { CreatePortfolioModal } from "../modal/portfolio/create-portfolio.modal";
 import { UpdatePortfolioModal } from "../modal/portfolio/update-portfolio.modal";
 import { WelcomePortfolioModal } from "../modal/portfolio/welcome.portfolio.modal";
@@ -16,7 +17,31 @@ export function PortfolioSummary() {
 	const portfolio = usePortfolio(portfolioId as string);
 	const balance = usePortfolioBalance(portfolioId as string);
 
-	if (portfolio.isLoading) return <PortfolioSummarySkeleton />;
+	/**
+	 * @author Ríder Cantuária
+	 * @todo Handle not found portfolio by other way
+	 */
+	if (portfolio.isError && portfolioId)
+		return (
+			<NotFoundModal
+				title="Where my Portfolio?"
+				description="It appears that the portfolio you are looking for is not found. You can create a new one to start tracking your investments and trades."
+			/>
+		);
+
+	if (portfolio.isLoading) {
+		return <PortfolioSummarySkeleton />;
+	}
+
+	if (!portfolio.data && portfolioId) {
+		return (
+			<NotFoundModal
+				title="Where my Portfolio?"
+				description="It appears that the portfolio you are looking for is not found. You can create a new one to start tracking your investments and trades."
+			/>
+		);
+	}
+	/*eof @todo Handle not found portfolio by other way */
 
 	return (
 		<>

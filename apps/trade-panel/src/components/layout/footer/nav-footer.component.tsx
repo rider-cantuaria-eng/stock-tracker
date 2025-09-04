@@ -7,7 +7,11 @@ export function NavFooterList({ navSections }: INavSectionListProps) {
 			<ul>
 				{navSections?.items?.map((items, index) => (
 					<li className="mt-4" key={index}>
-						<a href={items.href} className=" text-[#81818B]">
+						<a
+							href={items.href}
+							className=" text-gray-500"
+							target={items.newWindow ? "_blank" : "_self"}
+						>
 							{items.label}
 						</a>
 					</li>
