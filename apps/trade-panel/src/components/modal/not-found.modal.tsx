@@ -9,7 +9,12 @@ import {
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-export function NotFoundPortfolioModal() {
+interface INotFoundModalProps {
+	title: string;
+	description?: string;
+}
+
+export function NotFoundModal({ title, description }: INotFoundModalProps) {
 	const router = useRouter();
 
 	const handleOpenChange = () => {
@@ -33,11 +38,8 @@ export function NotFoundPortfolioModal() {
 							draggable={false}
 						/>
 						<div className="flex flex-col items-center gap-1.5">
-							<h1 className="text-2xl font-bold">Where my Portfolio?</h1>
-							<p className="text-sm text-gray-500 text-center max-w-sm">
-								It appears that the portfolio you are looking for is not found. You can
-								create a new one to start tracking your investments and trades.
-							</p>
+							<h1 className="text-2xl font-bold">{title}</h1>
+							<p className="text-sm text-gray-500 text-center max-w-sm">{description}</p>
 						</div>
 					</div>
 				</div>
