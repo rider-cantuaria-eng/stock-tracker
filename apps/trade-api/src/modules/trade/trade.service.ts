@@ -4,7 +4,11 @@ import { TradeDto } from "./repository/dto";
 import { TradeRepository } from "./repository/trade.repository";
 import { PortfolioService } from "../portfolio/portfolio.service";
 import { ServiceErrorException } from "src/exceptions/service-error.exception";
-import { IPaginationParams, TTradePeriodType } from "./trade.types";
+import {
+  IPaginationParams,
+  TTradePeriodType,
+  IPortfolioBalance,
+} from "./trade.types";
 import { calculateProfitLossByDate } from "./trade.helper";
 
 @Injectable()
@@ -242,6 +246,58 @@ export class TradeService {
 
       throw new ServiceErrorException(
         `Error fetching trades report for portfolio ${portfolioId}`,
+      );
+    }
+  }
+
+  // Balance AREA
+  async getPortfolioBalance(portfolioId: string): Promise<IPortfolioBalance> {
+    try {
+      const { portfolio, trades } = await this.findAllByPortfolio(portfolioId);
+
+      console.debug("calculating portfolio balance...");
+
+      // Calculate total trades value
+      // If trade has exitPrice, use exitPrice * quantity
+      // If trade doesn't have exitPrice, use entryPrice * quantity (open position)
+      const totalTradesValue = trades.reduce((total, trade) => {
+        const price = trade.exitPrice || trade.entryPrice;
+        return total + price * trade.quantity;
+      }, 0);
+
+      // Profit/Loss = total trades value - (entry prices * quantities)
+      const totalCost = trades.reduce((total, trade) => {
+        return total + trade.entryPrice * trade.quantity;
+      }, 0);
+
+      const profitLoss = totalTradesValue - totalCost;
+
+      // Profit/Loss percentage based on total cost
+      const profitLossPercentage =
+        totalCost > 0 ? (profitLoss / totalCost) * 100 : 0;
+
+      const balance: IPortfolioBalance = {
+        portfolioId: portfolio.id,
+        portfolioName: portfolio.name,
+        initialValue: portfolio.initialValue,
+        totalTradesValue,
+        totalTrades: trades.length,
+        profitLoss,
+        profitLossPercentage,
+      };
+
+      console.debug("portfolio balance calculated...", balance);
+
+      return balance;
+    } catch (error) {
+      console.error(error);
+
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+
+      throw new ServiceErrorException(
+        `Error calculating balance for portfolio ${portfolioId}`,
       );
     }
   }

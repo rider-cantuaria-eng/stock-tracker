@@ -94,3 +94,14 @@ export interface IPaginatedApiResponse<T> {
   data: T[];
   pagination: IPaginationMeta;
 }
+
+// Portfolio Balance Types
+export interface IPortfolioBalance {
+  portfolioId: string;
+  portfolioName: string;
+  initialValue: number;
+  totalTradesValue: number;
+  totalTrades: number;
+  profitLoss: number;
+  profitLossPercentage: number;
+}
