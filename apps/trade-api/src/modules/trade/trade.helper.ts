@@ -92,3 +92,48 @@ export const calculateProfitLossByDate = (
     );
   }
 };
+
+/**
+ * Calculate total trades value
+ * If trade has exitPrice, use exitPrice * quantity
+ * If trade doesn't have exitPrice, use entryPrice * quantity (open position)
+ */
+export const calculatePortfolioBalance = (trades: Trade[]) => {
+  const totalTradesValue = trades.reduce((total, trade) => {
+    const price = trade.exitPrice || trade.entryPrice;
+    return total + price * trade.quantity;
+  }, 0);
+
+  return totalTradesValue;
+};
+
+export const calculateProfitLoss = (trades: Trade[]) => {
+  const profitLoss = trades.reduce((total, trade) => {
+    if (!trade.exitPrice) return total;
+
+    const difference =
+      trade.exitPrice * trade.quantity - trade.entryPrice * trade.quantity;
+
+    return total + difference;
+  }, 0);
+
+  return profitLoss;
+};
+
+// all money invested in the trades
+export const calculateCollateral = (trades: Trade[]) => {
+  const collateral = trades.reduce((total, trade) => {
+    return total + trade.entryPrice * trade.quantity;
+  }, 0);
+
+  return collateral;
+};
+
+export const calculateProfitLossPercentage = (trades: Trade[]) => {
+  const profitLoss = calculateProfitLoss(trades);
+  const collateral = calculateCollateral(trades);
+  const profitLossPercentage =
+    collateral > 0 ? (profitLoss / collateral) * 100 : 0;
+
+  return profitLossPercentage;
+};
