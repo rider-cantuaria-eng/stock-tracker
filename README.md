@@ -9,16 +9,17 @@ To run this project locally, follow these steps:
    pnpm i
    ```
 
-2. Start Docker services:
-   ```bash
-   pnpm docker:up
-   ```
+2. Configure DATABASE_URL environment variable in the .env file (see .env.example for reference)
 
 3. Run database migrations:
    ```bash
    pnpm db:migrate
    ```
 
+4. Run dev mode:
+   ```bash
+   pnpm dev
+   ```
 
 ## Running Docker
 
@@ -31,7 +32,7 @@ The application consists of 4 services:
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
 │   Trade Panel   │    │    Trade API    │    │   PostgreSQL    │
-│   (Frontend)    │──▶│   (Backend)     │──▶│   (Database)  │
+│   (Frontend)    │──▶│   (Backend)     │──▶│   (Database)    │
 │   Port: 3000    │    │   Port: 3001    │    │   Port: 5432    │
 └─────────────────┘    └─────────────────┘    └─────────────────┘
                                                         │
