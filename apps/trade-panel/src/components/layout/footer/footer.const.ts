@@ -26,9 +26,21 @@ export const navSections: INavSection[] = [
 	{
 		title: "Resources",
 		items: [
-			{ label: "Requirements", href: "#", newWindow: true },
-			{ label: "Docs", href: "#" },
-			{ label: "Github Repository", href: "#", newWindow: true },
+			{
+				label: "Requirements",
+				href: "https://docs.google.com/document/d/178QEdJkr-0l4P7IP-Iop3qMsLxZhJXLVqPoAo6CvSAA/edit?tab=t.0#heading=h.xoxnwnkjam3y",
+				newWindow: true,
+			},
+			{
+				label: "Docs",
+				href: "https://github.com/rider-cantuaria-eng/stock-tracker/blob/develop/README.md",
+				newWindow: true,
+			},
+			{
+				label: "Github Repository",
+				href: "https://github.com/rider-cantuaria-eng/stock-tracker/tree/develop",
+				newWindow: true,
+			},
 		],
 	},
 ];
