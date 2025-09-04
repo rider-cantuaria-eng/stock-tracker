@@ -1,5 +1,4 @@
 import { IPortfolio } from "@workspace/api-client/types";
-import { Button } from "@workspace/ui/components/button";
 import {
 	Dialog,
 	DialogContent,
@@ -11,6 +10,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 import { CreatePortfolioModal } from "./create-portfolio.modal";
+import { SelectItemPortfolio } from "./select-item-portfolio.component";
 
 interface ISelectPortfolioModalProps {
 	portfolios: IPortfolio[];
@@ -50,31 +50,7 @@ export function SelectPortfolioModal(props: ISelectPortfolioModalProps) {
 					</div>
 					<div className="flex flex-col gap-2">
 						{portfolios?.map(portfolio => (
-							<div
-								key={portfolio.id}
-								className="flex items-center justify-between p-3 border rounded-lg"
-							>
-								<div className="flex items-center gap-3">
-									<div className="w-8 h-8 bg-gray-900 rounded flex items-center justify-center">
-										<span className="text-white text-sm font-medium">
-											{portfolio.name.charAt(0).toUpperCase()}
-										</span>
-									</div>
-									<div>
-										<div className="font-medium">{portfolio.name}</div>
-										<div className="text-sm text-gray-500">
-											${portfolio.initialValue.toLocaleString()}
-										</div>
-									</div>
-								</div>
-								<Button
-									type="button"
-									size="sm"
-									onClick={() => router.push(`/portfolio/${portfolio.id}`)}
-								>
-									Select
-								</Button>
-							</div>
+							<SelectItemPortfolio key={portfolio.id} portfolio={portfolio} />
 						))}
 					</div>
 				</div>

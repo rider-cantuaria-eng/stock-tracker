@@ -31,7 +31,11 @@ export function PortfolioDropdownItem(props: IPortfolioDropdownItemProps) {
 		>
 			{portfolio?.name}
 			<DropdownMenuShortcut>
-				${balance.data?.totalTradesValue.toLocaleString()}
+				{balance.isLoading ? (
+					<div className="h-3 w-12 bg-gray-200 rounded animate-pulse"></div>
+				) : (
+					`$${balance.data?.totalTradesValue.toLocaleString()}`
+				)}
 			</DropdownMenuShortcut>
 		</DropdownMenuItem>
 	);
