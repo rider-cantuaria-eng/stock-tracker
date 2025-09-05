@@ -1,6 +1,20 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "../client";
 import type { ICreateTradeRequest, IUpdateTradeRequest, TTradePeriodType } from "../types";
+
+
+function _forRefreshAllTradesData(queryClient: QueryClient, variables: { portfolioId: string }) {
+  queryClient.invalidateQueries({ queryKey: tradeKeys.list(variables.portfolioId) });
+  queryClient.invalidateQueries({ queryKey: tradeKeys.recents() });
+
+  queryClient.invalidateQueries({ queryKey: tradeKeys.report(variables.portfolioId, "7d") });
+  queryClient.invalidateQueries({ queryKey: tradeKeys.report(variables.portfolioId, "15d") });
+  queryClient.invalidateQueries({ queryKey: tradeKeys.report(variables.portfolioId, "1m") });
+  queryClient.invalidateQueries({ queryKey: tradeKeys.report(variables.portfolioId, "6m") });
+  queryClient.invalidateQueries({ queryKey: tradeKeys.report(variables.portfolioId, "1y") });
+
+  queryClient.invalidateQueries({ queryKey: tradeKeys.balance(variables.portfolioId) });
+}
 
 // Query keys
 export const tradeKeys = {
@@ -55,11 +69,7 @@ export function useCreateTrade() {
     mutationFn: ({ portfolioId, data }: { portfolioId: string; data: ICreateTradeRequest }) => 
       apiClient.createTrade(portfolioId, data),
     onSuccess: (_, variables) => {
-      // Invalidate the trades list for the specific portfolio and report
-      queryClient.invalidateQueries({ queryKey: tradeKeys.list(variables.portfolioId) });
-      queryClient.invalidateQueries({ queryKey: tradeKeys.recents() });
-      queryClient.invalidateQueries({ queryKey: tradeKeys.report(variables.portfolioId, "7d") });
-      queryClient.invalidateQueries({ queryKey: tradeKeys.balance(variables.portfolioId) });
+      _forRefreshAllTradesData(queryClient, variables);
     },
   });
 }
@@ -74,14 +84,7 @@ export function useUpdateTrade() {
       data: IUpdateTradeRequest 
     }) => apiClient.updateTrade(portfolioId, tradeId, data),
     onSuccess: (_, variables) => {
-      // Invalidate both the list and the specific detail
-      queryClient.invalidateQueries({ queryKey: tradeKeys.list(variables.portfolioId) });
-      queryClient.invalidateQueries({ 
-        queryKey: tradeKeys.detail(variables.portfolioId, variables.tradeId) 
-      });
-      queryClient.invalidateQueries({ queryKey: tradeKeys.recents() });
-      queryClient.invalidateQueries({ queryKey: tradeKeys.report(variables.portfolioId, "7d") });
-      queryClient.invalidateQueries({ queryKey: tradeKeys.balance(variables.portfolioId) });
+      _forRefreshAllTradesData(queryClient, variables);
     },
   });
 }

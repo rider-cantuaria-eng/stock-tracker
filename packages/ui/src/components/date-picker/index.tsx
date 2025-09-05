@@ -84,6 +84,7 @@ export function DatePicker(props: IDatePickerProps) {
             captionLayout="dropdown"
             className={cn(error && "border-destructive bg-amber-500")}
             onSelect={handleDateSelect}
+            defaultMonth={date}            
           />
           {showTime && (
             <div className="p-3 border-t">
