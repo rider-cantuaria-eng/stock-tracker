@@ -66,3 +66,42 @@ export interface ITradeReportDataPoint {
 }
 
 export type ITradeReport = ITradeReportDataPoint[];
+
+// Pagination Types
+export interface IPaginationParams {
+  page?: number;
+  limit?: number;
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc';
+}
+
+export interface IPaginationMeta {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+}
+
+export interface IPaginatedResponse<T> {
+  data: T[];
+  meta: IPaginationMeta;
+}
+
+export interface IPaginatedApiResponse<T> {
+  message: string;
+  data: T[];
+  pagination: IPaginationMeta;
+}
+
+// Portfolio Balance Types
+export interface IPortfolioBalance {
+  portfolioId: string;
+  portfolioName: string;
+  initialValue: number;
+  totalTradesValue: number;
+  totalTrades: number;
+  profitLoss: number;
+  profitLossPercentage: number;
+}
