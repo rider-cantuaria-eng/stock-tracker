@@ -11,10 +11,10 @@ import {
 } from "@workspace/ui/components/sheet";
 import { useParams } from "next/navigation";
 
+import { DropdownPortfolio } from "../../portfolio/portfolio-dropdown.component";
 import { TradesChart } from "../../trades/chart/trades-chart.component";
 import { RecentsTrades } from "../../trades/recents-trades/recent-trades.component";
 import { AppLogo } from "../app-logo.component";
-import { DropdownPortfolio } from "../../portfolio/portfolio-dropdown.component";
 
 export function HeaderMobile() {
 	const { id: portfolioId } = useParams();

@@ -3,6 +3,7 @@
 import { usePortfolio } from "@workspace/api-client/hooks";
 import { ITrade } from "@workspace/api-client/types";
 import { cn } from "@workspace/ui/lib/utils";
+import { RowClickedEvent } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 import { useTheme } from "next-themes";
 import { useParams } from "next/navigation";
@@ -25,7 +26,7 @@ export function TradesTable() {
 	);
 	const { theme } = useTheme();
 
-	const handleRowClick = (event: any) => {
+	const handleRowClick = (event: RowClickedEvent) => {
 		const trade = event.data as ITrade;
 		setSelectedTrade(trade);
 		setIsEditModalOpen(true);
