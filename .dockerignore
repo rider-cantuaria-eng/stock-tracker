@@ -74,6 +74,3 @@ data/
 # Documentation
 README.md
 docs/
-
-# Prisma
-prisma/migrations/

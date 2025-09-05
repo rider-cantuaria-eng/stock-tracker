@@ -47,8 +47,9 @@ RUN cd apps/trade-api && pnpm build
 FROM base AS runner
 WORKDIR /app
 
-# Install pnpm in runner stage
-RUN npm install -g pnpm@latest
+# Install pnpm and postgresql-client in runner stage
+RUN npm install -g pnpm@latest prisma@6.15.0
+RUN apk add --no-cache postgresql-client
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nestjs
@@ -81,5 +82,5 @@ ENV NODE_ENV=production
 
 # Health check is handled by docker-compose
 
-# Start the application
-CMD ["node", "apps/trade-api/dist/main.js"]
+# Start the application with migrations
+CMD ["sh", "-c", "echo 'Waiting for database...' && until pg_isready -h postgres -p 5432 -U trading_user; do echo 'Database is unavailable - sleeping'; sleep 2; done && echo 'Database is ready!' && cd apps/trade-api && echo 'Running migrations...' && prisma migrate deploy && echo 'Starting application...' && cd /app && node apps/trade-api/dist/main.js"]
