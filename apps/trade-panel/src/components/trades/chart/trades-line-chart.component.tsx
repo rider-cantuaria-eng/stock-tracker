@@ -5,19 +5,6 @@ import React, { useEffect, useRef, useState } from "react";
 
 import { ILineChartProps } from "./trades-chart.types";
 
-const generateDummyData = (days: number) => {
-	const data: number[] = [];
-	const labels: string[] = [];
-	const today = new Date();
-	for (let i = days - 1; i >= 0; i--) {
-		const date = new Date(today);
-		date.setDate(today.getDate() - i);
-		labels.push(`${date.getMonth() + 1}/${date.getDate()}`);
-		data.push(Math.floor(Math.random() * 1000) + 500);
-	}
-	return { labels, data };
-};
-
 export function TradesLineChart(props: ILineChartProps) {
 	const { range = "1m", height = "100%", width = "100%", data = [] } = props;
 
