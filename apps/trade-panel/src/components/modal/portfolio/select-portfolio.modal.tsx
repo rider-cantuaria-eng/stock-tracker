@@ -7,7 +7,6 @@ import {
 	DialogTitle,
 } from "@workspace/ui/components/dialog";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 
 import { CreatePortfolioModal } from "./create-portfolio.modal";
 import { SelectItemPortfolio } from "./select-item-portfolio.component";
@@ -17,8 +16,6 @@ interface ISelectPortfolioModalProps {
 }
 export function SelectPortfolioModal(props: ISelectPortfolioModalProps) {
 	const { portfolios } = props;
-
-	const router = useRouter();
 
 	const handleOpenChange = () => {
 		// Prevent modal from closing

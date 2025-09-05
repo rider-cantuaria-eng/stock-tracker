@@ -3,20 +3,8 @@
 import * as echarts from "echarts";
 import React, { useEffect, useRef, useState } from "react";
 
-import { ILineChartProps } from "./trades-chart.types";
-
-const generateDummyData = (days: number) => {
-	const data: number[] = [];
-	const labels: string[] = [];
-	const today = new Date();
-	for (let i = days - 1; i >= 0; i--) {
-		const date = new Date(today);
-		date.setDate(today.getDate() - i);
-		labels.push(`${date.getMonth() + 1}/${date.getDate()}`);
-		data.push(Math.floor(Math.random() * 1000) + 500);
-	}
-	return { labels, data };
-};
+import { ILineChartProps } from "../trades/chart/trades-chart.types";
+import { lineChartOptions } from "./echart.helper";
 
 export function TradesLineChart(props: ILineChartProps) {
 	const { range = "1m", height = "100%", width = "100%", data = [] } = props;
@@ -42,16 +30,7 @@ export function TradesLineChart(props: ILineChartProps) {
 	useEffect(() => {
 		if (chartInstance && data) {
 			const filtered = getFilteredData();
-			chartInstance.setOption({
-				xAxis: {
-					type: "category",
-					data: filtered.labels,
-					boundaryGap: false,
-				},
-				yAxis: { type: "value" },
-				series: [{ data: filtered.data, type: "line", smooth: true }],
-				tooltip: { trigger: "axis" },
-			});
+			chartInstance.setOption(lineChartOptions(filtered));
 			chartInstance.resize();
 		}
 	}, [range, chartInstance, data]);

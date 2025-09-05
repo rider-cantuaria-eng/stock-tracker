@@ -17,7 +17,7 @@ import { RxExitFullScreen } from "react-icons/rx";
 
 import { TradesChartSkeleton } from "./trades-chart.skeleton";
 import { RangeType } from "./trades-chart.types";
-import { TradesLineChart } from "./trades-line-chart.component";
+import { TradesLineChart } from "../../echart/line-chart.component";
 
 export function TradesChart() {
 	const [range, setRange] = useState<RangeType>("7d");
@@ -62,13 +62,6 @@ export function TradesChart() {
 						className="cursor-pointer"
 					>
 						1Y
-					</TabsTrigger>
-					<TabsTrigger
-						value="all"
-						onClick={() => setRange("all")}
-						className="cursor-pointer"
-					>
-						All
 					</TabsTrigger>
 				</TabsList>
 			</Tabs>
