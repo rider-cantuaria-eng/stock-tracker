@@ -93,7 +93,7 @@ export class TradeController {
   @ApiQuery({
     name: "period",
     description: "Time period for the report",
-    enum: ["7d", "15d", "1m", "6m", "1y", "all"],
+    enum: ["7d", "15d", "1m", "6m", "1y"],
     example: "1m",
   })
   @ApiResponse({

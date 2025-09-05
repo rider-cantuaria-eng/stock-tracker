@@ -9,17 +9,30 @@ const periodToDays: Record<TTradePeriodType, number | null> = {
   "1m": 30,
   "6m": 180,
   "1y": 365,
-  all: null,
 };
 
 const dataPointsConfig: Record<TTradePeriodType, number> = {
   "7d": 7,
-  "15d": 5,
-  "1m": 10,
+  "15d": 7,
+  "1m": 7,
   "6m": 6,
   "1y": 12,
-  all: 12,
 };
+
+const monthNames = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
 
 export const calculateProfitLossByDate = (
   trades: Trade[],
@@ -28,9 +41,18 @@ export const calculateProfitLossByDate = (
   try {
     const now = new Date();
     const days = periodToDays[period];
-    const startDate = days
-      ? new Date(now.getTime() - days * 24 * 60 * 60 * 1000)
-      : new Date(0);
+
+    let startDate: Date;
+    if (["1y", "6m"].includes(period)) {
+      // For 1y, start from 12 months ago from the current month
+      const currentYear = now.getFullYear();
+      const currentMonth = now.getMonth();
+      startDate = new Date(currentYear - 1, currentMonth, 1);
+    } else {
+      startDate = days
+        ? new Date(now.getTime() - days * 24 * 60 * 60 * 1000)
+        : new Date(0);
+    }
 
     const filteredTrades = trades.filter(
       (trade) => new Date(trade.date) >= startDate,
@@ -42,45 +64,91 @@ export const calculateProfitLossByDate = (
     );
 
     const targetDataPoints = dataPointsConfig[period];
-    const totalDays = days || 365;
-    const interval = Math.max(1, Math.floor(totalDays / targetDataPoints));
-
-    // Generate evenly spaced data points
     const tradesWithProfitLoss = [];
     let cumulativeProfitLoss = 0;
 
-    for (let i = 0; i < targetDataPoints; i++) {
-      const dayOffset = i * interval;
-      const intervalEndDate = new Date(
-        startDate.getTime() + (dayOffset + interval) * 24 * 60 * 60 * 1000,
-      );
-      const label = `${intervalEndDate.getMonth() + 1}/${intervalEndDate.getDate()}`;
+    if (["1y", "6m"].includes(period)) {
+      // For 1y, generate monthly data points from current month going backwards
+      const currentYear = now.getFullYear();
+      const currentMonth = now.getMonth();
 
-      // Find trades within this interval
-      const tradesInInterval = filteredTrades.filter((trade) => {
-        const tradeDate = new Date(trade.date);
-        const intervalStartDate = new Date(
-          startDate.getTime() + dayOffset * 24 * 60 * 60 * 1000,
+      for (let i = 0; i < targetDataPoints; i++) {
+        // Calculate the month going backwards from current month
+        const monthsBack = targetDataPoints - 1 - i;
+        const targetYear =
+          currentMonth - monthsBack < 0 ? currentYear - 1 : currentYear;
+        const targetMonth =
+          currentMonth - monthsBack < 0
+            ? 12 + (currentMonth - monthsBack)
+            : currentMonth - monthsBack;
+
+        const monthDate = new Date(targetYear, targetMonth, 1);
+        const nextMonthDate = new Date(targetYear, targetMonth + 1, 1);
+
+        const label = monthNames[targetMonth];
+
+        // Find trades within this month
+        const tradesInMonth = filteredTrades.filter((trade) => {
+          const tradeDate = new Date(trade.date);
+          return tradeDate >= monthDate && tradeDate < nextMonthDate;
+        });
+
+        // Calculate profit/loss for trades in this month
+        let monthProfitLoss = 0;
+        tradesInMonth.forEach((trade) => {
+          if (trade.exitPrice && trade.date) {
+            monthProfitLoss +=
+              (trade.exitPrice - trade.entryPrice) * trade.quantity;
+          }
+        });
+
+        // Add to cumulative total
+        cumulativeProfitLoss += monthProfitLoss;
+
+        tradesWithProfitLoss.push({
+          label,
+          value: cumulativeProfitLoss,
+        });
+      }
+    } else {
+      // For other periods, use the existing interval-based logic
+      const totalDays = days || 365;
+      const interval = Math.max(1, Math.floor(totalDays / targetDataPoints));
+
+      for (let i = 0; i < targetDataPoints; i++) {
+        const dayOffset = i * interval;
+        const intervalEndDate = new Date(
+          startDate.getTime() + (dayOffset + interval) * 24 * 60 * 60 * 1000,
         );
-        return tradeDate >= intervalStartDate && tradeDate < intervalEndDate;
-      });
 
-      // Calculate profit/loss for trades in this interval
-      let intervalProfitLoss = 0;
-      tradesInInterval.forEach((trade) => {
-        if (trade.exitPrice && trade.date) {
-          intervalProfitLoss +=
-            (trade.exitPrice - trade.entryPrice) * trade.quantity;
-        }
-      });
+        const label = `${intervalEndDate.getMonth() + 1}/${intervalEndDate.getDate()}`;
 
-      // Add to cumulative total
-      cumulativeProfitLoss += intervalProfitLoss;
+        // Find trades within this interval
+        const tradesInInterval = filteredTrades.filter((trade) => {
+          const tradeDate = new Date(trade.date);
+          const intervalStartDate = new Date(
+            startDate.getTime() + dayOffset * 24 * 60 * 60 * 1000,
+          );
+          return tradeDate >= intervalStartDate && tradeDate < intervalEndDate;
+        });
 
-      tradesWithProfitLoss.push({
-        label,
-        value: cumulativeProfitLoss,
-      });
+        // Calculate profit/loss for trades in this interval
+        let intervalProfitLoss = 0;
+        tradesInInterval.forEach((trade) => {
+          if (trade.exitPrice && trade.date) {
+            intervalProfitLoss +=
+              (trade.exitPrice - trade.entryPrice) * trade.quantity;
+          }
+        });
+
+        // Add to cumulative total
+        cumulativeProfitLoss += intervalProfitLoss;
+
+        tradesWithProfitLoss.push({
+          label,
+          value: cumulativeProfitLoss,
+        });
+      }
     }
 
     return tradesWithProfitLoss;
